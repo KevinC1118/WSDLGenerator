@@ -1,0 +1,82 @@
+#buttomLayer
+{
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	text-align: center;
+	border: dashed 6px #BEBEBE;
+	z-index: 1;
+}
+
+#file
+{
+	position: absolute;
+	visibility: hidden;
+	z-index: -100;
+}
+
+.mask
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.6;
+	background-color: #FFFFFF;
+	z-index: 100;
+}
+
+.loaderImage
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	height: 30px;
+	/*display: inline-block;
+	/*background: white;
+	-moz-border-radius: 15px;*/
+	/*height: 250px;*/
+	/*line-height: 250px;*/
+	/*top: 50%;
+	left: 50%;*/
+	text-align: center;
+	z-index: 200;
+	/*-moz-box-shadow: 0 0 9px #eeeeee;*/
+}
+
+.dialog
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	background: white;
+	border: dashed 6px #5CC2FF;
+	border-radius: 13px 0 13px 13px;
+	-webkit-border-radius: 15px 0 15px 15px;
+	-moz-border-radius: 15px 0 15px 15px;
+	height: 200px;
+	width: 400px;
+	/*line-height: 200px;*/
+	text-align: center;
+	z-index: 200;
+	/*-moz-box-shadow: 0 0 9px #000000;*/
+}
+
+.content
+{
+	line-height: 1.5em;
+	vertical-align: middle;
+	display: inline-block;
+}
