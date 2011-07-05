@@ -122,16 +122,13 @@ var upload = function(ev) {
 			var dialog = new Dialog();
 			var resptxt = xmlhttp.responseText.split(',');
 
-			dialog.content = 'Spending ' + resptxt[0]
-					+ ' second.<br /><a href="/Download?' + resptxt[1]
+			dialog.content = '<a href="/Download?' + resptxt[1]
 					+ '">Download</a><br/>';
 			
 			
 			document.body.removeChild(document.getElementById('loaderImage'));
 
-			dialog.open(function() {
-				window.location.href = '/';
-			});
+			dialog.show();
 		}
 		// showDialog(xmlhttp.responseText.split(','));
 	}, false);
@@ -159,21 +156,16 @@ window.onload = (function(e) {
 	var buttomLayer = document.getElementById('buttomLayer');
 	var fileInput = document.getElementById('file');
 	
+	// Cancel dragover
 	buttomLayer.addEventListener('dragover', cancel, false);
-	buttomLayer.addEventListener('dragenter', cancel, false);
+	//buttomLayer.addEventListener('dragenter', cancel, false);
 	
 	buttomLayer.addEventListener('click', function(){
 		fileInput.click();
 	}, false);
 	
+	// Do upload
 	buttomLayer.addEventListener('drop', upload, false);
-	
 	fileInput.addEventListener('change', upload, false);
 	
-	// document.getElementById('showDialog').addEventListener('click',
-	// function() {
-	// var dialog = new Dialog();
-	// dialog.content = 'hello';
-	// dialog.show();
-	// }, false);
 });
