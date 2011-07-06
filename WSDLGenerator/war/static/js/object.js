@@ -24,38 +24,31 @@ function Dialog() {
 	closeImage.style.right = '5px';
 	closeImage.style.cursor = 'pointer';
 	dialog.appendChild(closeImage);
-	
-	closeImage.addEventListener('click', function(){
+
+	closeImage.addEventListener('click', function() {
 		document.body.removeChild(dialog);
 		window.location.href = '/';
 	}, false);
 
 	this.show = function() {
-		
+
 		c.innerHTML = this.content;
 		document.body.appendChild(dialog);
 	};
 }
 
-var FileObj = {
-		
-		parent: null,
-		
-		fileObj: function() {
-			
-			var fo = document.createElement('div');
-			fo.className = 'fileObj';
-			
-			return fo;
-		},
-		
-		show: function() {
-			
-			if(!this.parent) {
-				console.log("No Setting parent");
-				this.parent = document.body;
-			}
-			
-			
-		}
-};
+function FileObj(map) {
+
+	var deleteImg = new Image();
+	deleteImg.src = '/static/images/delete.gif';
+	
+	var fileObj = document.createElement('div');
+	fileObj.className = 'fileObj';
+
+	var fileName = document.createElement('span');
+	fileName.innerHTML = map.fileName;
+	
+	fileObj.appendChild(deleteImg);
+
+	return fileObj;
+}
