@@ -103,10 +103,6 @@ public class WSDLGenerator extends AbstractGenerator {
 				save(definition, str);
 			}
 		}
-		// insertSchemaImport(new
-		// StringBuffer(destination).append(definition.getQName().getLocalPart()).append(".wsdl").toString()
-		// , definition
-		// , sn);
 	}
 
 	@Override
@@ -122,8 +118,6 @@ public class WSDLGenerator extends AbstractGenerator {
 
 		try {
 			writer = wsdlFactory.newWSDLWriter();
-
-			// File newFile = CommonUtil.getNewTempFile();
 
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -151,10 +145,11 @@ public class WSDLGenerator extends AbstractGenerator {
 		// Create a new definition
 		Definition definition = wsdlFactory.newDefinition();
 
-		// TargetNamespace
+		// Set TargetNamespace
 		definition.setTargetNamespace(new StringBuffer(PROP
-				.getProperty("excel2wsdl.lancer.namespace.url")).append(
-				fileName).toString());
+				.getProperty("excel2wsdl.lancer.namespace.url"))
+				.append(fileName).append(".").append(serviceName.toUpperCase())
+				.append(".wsdl").toString());
 
 		definition.addNamespace("soap",
 				PROP.getProperty("excel2wsdl.namespace.soap"));
@@ -177,12 +172,6 @@ public class WSDLGenerator extends AbstractGenerator {
 
 		return definition;
 	}
-
-	// private void typesGen(Definition definition, String serviceName) {
-	//
-	// LOGGER.info("Start to generate types...");
-	// definition.createTypes();
-	// }
 
 	private void messageGen(Definition definition, String serviceName) {
 
