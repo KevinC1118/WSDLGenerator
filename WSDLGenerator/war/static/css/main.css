@@ -16,7 +16,7 @@
 #file
 {
 	position: absolute;
-	visibility: hidden;
+	display: none;
 	z-index: -100;
 }
 
@@ -83,5 +83,21 @@
 
 .fileObj
 {
-	
+	width: 100px;
+	height: 120px;
+	border: solid #A8FF80;
+	background: white;
+	-moz-box-shadow: 5px 5px 5px;
+	border-radius: 10px 0 0 0;
+	-moz-border-radius: 10px 0 0 0;
+	-webkit-border-radius: 10px 0 0 0;
+	z-index: 50;
+}
+
+.fileObj img
+{
+	position: relative;
+	bottom: -95px;
+	right: -22px;
+	z-index: 50;
 }

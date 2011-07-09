@@ -46,8 +46,9 @@ function FileObj(map) {
 	fileObj.className = 'fileObj';
 
 	var fileName = document.createElement('span');
-	fileName.innerHTML = map.fileName;
+	fileName.appendChild(document.createTextNode(map.fileName));
 	
+	fileObj.appendChild(fileName);
 	fileObj.appendChild(deleteImg);
 
 	return fileObj;

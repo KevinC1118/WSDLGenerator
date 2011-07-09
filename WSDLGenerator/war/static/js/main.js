@@ -99,9 +99,9 @@ function timeout(time) {
 }
 
 var upload = function(ev) {
-	
+
 	hideTipword();
-	
+
 	var xmlhttp = new XMLHttpRequest();
 	var url = 'Upload';
 
@@ -118,24 +118,23 @@ var upload = function(ev) {
 
 	xmlhttp.addEventListener('readystatechange', function(ev) {
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-			
+
 			var dialog = new Dialog();
 			var resptxt = xmlhttp.responseText.split(',');
 
 			dialog.content = '<a href="/Download?' + resptxt[1]
 					+ '">Download</a><br/>';
-			
-			
+
 			document.body.removeChild(document.getElementById('loaderImage'));
 
 			dialog.show();
 		}
 		// showDialog(xmlhttp.responseText.split(','));
 	}, false);
-		
-	if(ev.type == 'change')
+
+	if (ev.type == 'change')
 		xmlhttp.sendAsBinary(build(ev.currentTarget.files, boundary));
-	else if(ev.type == 'drop') {
+	else if (ev.type == 'drop') {
 		cancel(ev);
 		xmlhttp.sendAsBinary(build(ev.dataTransfer.files, boundary));
 	}
@@ -146,26 +145,33 @@ function hideTipword() {
 }
 
 function cancel(e) {
-	if (e.preventDefault) e.preventDefault(); // required by FF + Safari
-	e.dataTransfer.dropEffect = 'copy'; // tells the browser what drop effect is allowed here
+	if (e.preventDefault)
+		e.preventDefault(); // required by FF + Safari
+	e.dataTransfer.dropEffect = 'copy'; // tells the browser what drop effect is
+										// allowed here
 	return false; // required by IE
-} 
+}
 
 window.onload = (function(e) {
-	
+
 	var buttomLayer = document.getElementById('buttomLayer');
 	var fileInput = document.getElementById('file');
-	
+
 	// Cancel dragover
 	buttomLayer.addEventListener('dragover', cancel, false);
-	//buttomLayer.addEventListener('dragenter', cancel, false);
-	
-	buttomLayer.addEventListener('click', function(){
+	// buttomLayer.addEventListener('dragenter', cancel, false);
+
+	buttomLayer.addEventListener('click', function() {
 		fileInput.click();
 	}, false);
-	
+
 	// Do upload
 	buttomLayer.addEventListener('drop', upload, false);
 	fileInput.addEventListener('change', upload, false);
-	
+
+	var fo = new FileObj({
+		fileName : 'abc'
+	});
+	fo.addEventListener('click', {}, false);
+	document.body.appendChild(fo);
 });
