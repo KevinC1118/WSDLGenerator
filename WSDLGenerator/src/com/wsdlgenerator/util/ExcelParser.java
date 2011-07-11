@@ -250,12 +250,9 @@ public class ExcelParser {
 		LOGGER.info(String.format("There are %s services in %s.",
 				sheets.length, fileName));
 
-		// String msgName;
-		// Cell tmpCell;
-
 		/*
 		 * Get service name in each sheet in workbook but except the first
-		 * sheet. Service name default position is at B2.
+		 * sheet. Service name was set at B2.
 		 */
 		for (int i = 1, maxSheets = sheets.length; i < maxSheets; i++) {
 			try {

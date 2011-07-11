@@ -77,19 +77,16 @@ function build(files, boundary) {
 
 function timeout(time) {
 
-	var to = document.getElementById('timeout');
+	// var to = document.getElementById('timeout');
 
-	to.innerHTML = Math.floor(time / 60000) + ' minute <span class="second">'
+	this.innerHTML = Math.floor(time / 60000) + ' minute <span class="second">'
 			+ (time % 60000) / 1000 + '</span> second remaining';
 
-	var second_clone = to.getElementsByTagName('span')[0].cloneNode(true);
-	second_clone.style.fontSize = '20px';
+	// var second_clone = to.getElementsByTagName('span')[0].cloneNode(true);
+	// second_clone.style.fontSize = '20px';
 
-	if (time > 0)
-		setTimeout('timeout(' + (time - 1000) + ')', 1000);
-	else {
-		document.getElementById('content').innerHTML = 'Sorry, It\'s timeout.';
-	}
+	(time > 0) ? setTimeout('timeout(' + (time - 1000) + ')', 1000)
+			: this.innerHTML = 'Sorry, It\'s timeout.';
 }
 
 var upload = function(files) {
@@ -115,7 +112,7 @@ var upload = function(files) {
 					.split(',');
 
 			dialog.content = '<a href="/Download?' + resptxt[1]
-					+ '">Download</a><br/>';
+					+ '">Download</a>';
 
 			document.body.removeChild(document.getElementById('loaderImage'));
 
@@ -124,12 +121,7 @@ var upload = function(files) {
 		// showDialog(xmlhttp.responseText.split(','));
 	}, false);
 
-	if (ev.type == 'change')
-		xmlhttp.sendAsBinary(build(files, boundary));
-	else if (ev.type == 'drop') {
-		cancel(ev);
-		xmlhttp.sendAsBinary(build(files, boundary));
-	}
+	xmlhttp.sendAsBinary(build(files, boundary));
 };
 
 function hideTipword() {
@@ -166,14 +158,17 @@ var createFileObj = function(evt) {
 	}
 
 	for ( var i = 0, max = files.length; i < max; i++) {
-		
+
 		var li = document.createElement("li"), fo = new FileObj({
-			file: files[i],
+			file : files[i],
 		});
 
 		li.appendChild(fo);
 		ol.appendChild(li);
 	}
+
+	if (!document.querySelector('#uploadButton'))
+		document.body.appendChild(new UploadButton());
 };
 
 window.onload = (function(e) {

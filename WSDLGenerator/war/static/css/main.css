@@ -1,3 +1,8 @@
+body
+{
+	user-select: none;
+}
+
 #buttomLayer
 {
 	position: absolute;
@@ -23,13 +28,20 @@
 	display: inline-block;
 	margin: 5px;
 	vertical-align: top;
-	width: 90px;
+	width: 130px;
 }
 
 #file
 {
 	position: absolute;
 	display: none;
+}
+
+#uploadButton
+{
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
 }
 
 .mask
@@ -53,16 +65,8 @@
 	left: 0;
 	margin: auto;
 	height: 30px;
-	/*display: inline-block;
-	/*background: white;
-	-moz-border-radius: 15px;*/
-	/*height: 250px;*/
-	/*line-height: 250px;*/
-	/*top: 50%;
-	left: 50%;*/
 	text-align: center;
 	z-index: 200;
-	/*-moz-box-shadow: 0 0 9px #eeeeee;*/
 }
 
 .dialog
@@ -88,37 +92,47 @@
 
 .content
 {
-	line-height: 1.5em;
-	vertical-align: middle;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	height: 2.3em;
 	display: inline-block;
+}
+
+.content *
+{
+	text-decoration: none;
+	line-height: 1em;	
 }
 
 .fileObj
 {
-	/*width: 90px;*/
 	height: 110px;
-	border: solid #A8FF80;
+	border: none;
 	display: block;
 	font-size: 11px;
 	padding: 5px;
-	background-color: white;
-	box-shadow: 5px 5px 5px;
-	-moz-box-shadow: 5px 5px 5px;
-	-webkit-box-shadow: 5px 5px 5px;
-	border-radius: 15px 0 0 0;
-	-moz-border-radius: 15px 0 0 0;
-	-webkit-border-radius: 15px 0 0 0;
+	vertical-align: bottom;
 }
 
 .fileObj span
 {
 	word-wrap: break-word;
+	font-style: italic;
 }
 
 .fileObj img
 {
-	position: relative;
-	bottom: -90px;
-	right: -55px;
 	cursor: pointer;
+}
+
+.timeout
+{
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+	font-size: 10px;
 }
