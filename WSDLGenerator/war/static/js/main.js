@@ -1,9 +1,7 @@
 function loadstart(ev) {
 
-	var mask = document.createElement('div');
-	var div = document.createElement('div');
-	var percent = document.createElement('div');
-	var loaderImage = new Image();
+	var mask = document.createElement('div'), div = document
+			.createElement('div'), percent = document.createElement('div'), loaderImage = new Image();
 
 	mask.id = 'mask';
 	mask.className = 'mask';
@@ -36,11 +34,7 @@ function loadstart(ev) {
 
 function build(files, boundary) {
 
-	var dashdash = '--';
-	boundary = 'fdsfwefFDSF';
-	var crlf = '\r\n';
-
-	var builder = '';
+	var dashdash = '--', crlf = '\r\n', builder = '';
 
 	builder += 'content-disposition: form-data';
 	builder += crlf;
@@ -98,14 +92,12 @@ function timeout(time) {
 	}
 }
 
-var upload = function(ev) {
+var upload = function(files) {
 
 	hideTipword();
 
-	var xmlhttp = new XMLHttpRequest();
-	var url = 'Upload';
+	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = 'fdsfwefFDSF';
 
-	var boundary = 'fdsfwefFDSF';
 	xmlhttp.open('POST', url, true);
 	xmlhttp.setRequestHeader('Content-type', 'multipart/form-data; boundary='
 			+ boundary);
@@ -119,8 +111,8 @@ var upload = function(ev) {
 	xmlhttp.addEventListener('readystatechange', function(ev) {
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
 
-			var dialog = new Dialog();
-			var resptxt = xmlhttp.responseText.split(',');
+			var dialog = new Dialog(), resptxt = xmlhttp.responseText
+					.split(',');
 
 			dialog.content = '<a href="/Download?' + resptxt[1]
 					+ '">Download</a><br/>';
@@ -133,10 +125,10 @@ var upload = function(ev) {
 	}, false);
 
 	if (ev.type == 'change')
-		xmlhttp.sendAsBinary(build(ev.currentTarget.files, boundary));
+		xmlhttp.sendAsBinary(build(files, boundary));
 	else if (ev.type == 'drop') {
 		cancel(ev);
-		xmlhttp.sendAsBinary(build(ev.dataTransfer.files, boundary));
+		xmlhttp.sendAsBinary(build(files, boundary));
 	}
 };
 
@@ -148,30 +140,62 @@ function cancel(e) {
 	if (e.preventDefault)
 		e.preventDefault(); // required by FF + Safari
 	e.dataTransfer.dropEffect = 'copy'; // tells the browser what drop effect is
-										// allowed here
+	// allowed here
 	return false; // required by IE
 }
 
+var createFileObj = function(evt) {
+
+	var files;
+
+	if (evt.type == 'change')
+		files = evt.currentTarget.files;
+	else /* if (evt.type == 'drop') */{
+		cancel(evt);
+		files = evt.dataTransfer.files;
+	}
+
+	var ol;
+
+	if (document.querySelector('#fileList'))
+		ol = document.querySelector('#fileList');
+	else {
+		ol = document.createElement('ol');
+		ol.id = 'fileList';
+		document.body.appendChild(ol);
+	}
+
+	for ( var i = 0, max = files.length; i < max; i++) {
+		
+		var li = document.createElement("li"), fo = new FileObj({
+			file: files[i],
+		});
+
+		li.appendChild(fo);
+		ol.appendChild(li);
+	}
+};
+
 window.onload = (function(e) {
 
-	var buttomLayer = document.getElementById('buttomLayer');
-	var fileInput = document.getElementById('file');
+	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
+			.getElementById('file');
 
 	// Cancel dragover
 	buttomLayer.addEventListener('dragover', cancel, false);
 	// buttomLayer.addEventListener('dragenter', cancel, false);
 
-	buttomLayer.addEventListener('click', function() {
+	buttomLayer.addEventListener('click', function(evt) {
 		fileInput.click();
+		evt.stopPropagation();
+		evt.preventDefault();
 	}, false);
 
 	// Do upload
-	buttomLayer.addEventListener('drop', upload, false);
-	fileInput.addEventListener('change', upload, false);
+	// buttomLayer.addEventListener('drop', upload, false);
+	// fileInput.addEventListener('change', upload, false);
 
-	var fo = new FileObj({
-		fileName : 'abc'
-	});
-	fo.addEventListener('click', {}, false);
-	document.body.appendChild(fo);
+	buttomLayer.addEventListener('drop', createFileObj, false);
+	fileInput.addEventListener('change', createFileObj, false);
+
 });

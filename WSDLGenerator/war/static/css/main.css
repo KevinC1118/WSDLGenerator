@@ -10,14 +10,26 @@
 	-webkit-user-select: none;
 	text-align: center;
 	border: dashed 6px #BEBEBE;
-	z-index: 1;
+}
+
+#fileList {
+	position: absolute;
+	padding: 0;
+	margin: 10px 6px;
+	z-index: 50;
+}
+
+#fileList li {
+	display: inline-block;
+	margin: 5px;
+	vertical-align: top;
+	width: 90px;
 }
 
 #file
 {
 	position: absolute;
 	display: none;
-	z-index: -100;
 }
 
 .mask
@@ -83,21 +95,30 @@
 
 .fileObj
 {
-	width: 100px;
-	height: 120px;
+	/*width: 90px;*/
+	height: 110px;
 	border: solid #A8FF80;
-	background: white;
+	display: block;
+	font-size: 11px;
+	padding: 5px;
+	background-color: white;
+	box-shadow: 5px 5px 5px;
 	-moz-box-shadow: 5px 5px 5px;
-	border-radius: 10px 0 0 0;
-	-moz-border-radius: 10px 0 0 0;
-	-webkit-border-radius: 10px 0 0 0;
-	z-index: 50;
+	-webkit-box-shadow: 5px 5px 5px;
+	border-radius: 15px 0 0 0;
+	-moz-border-radius: 15px 0 0 0;
+	-webkit-border-radius: 15px 0 0 0;
+}
+
+.fileObj span
+{
+	word-wrap: break-word;
 }
 
 .fileObj img
 {
 	position: relative;
-	bottom: -95px;
-	right: -22px;
-	z-index: 50;
+	bottom: -90px;
+	right: -55px;
+	cursor: pointer;
 }

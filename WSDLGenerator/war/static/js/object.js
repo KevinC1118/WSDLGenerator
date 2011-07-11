@@ -39,17 +39,23 @@ function Dialog() {
 
 function FileObj(map) {
 
-	var deleteImg = new Image();
-	deleteImg.src = '/static/images/delete.gif';
-	
 	var fileObj = document.createElement('div');
 	fileObj.className = 'fileObj';
-
-	var fileName = document.createElement('span');
-	fileName.appendChild(document.createTextNode(map.fileName));
+	fileObj.file = map.file;
 	
-	fileObj.appendChild(fileName);
+	var deleteImg = new Image();
+	deleteImg.src = '/static/images/delete.gif';
 	fileObj.appendChild(deleteImg);
+
+	deleteImg.addEventListener('click', function() {
+		var p = fileObj.parentNode;
+		p.parentNode.removeChild(p);
+	}, false);
+	
+	var fileName = document.createElement('span');
+	fileName.appendChild(document.createTextNode(fileObj.file.name));
+
+	fileObj.appendChild(fileName);
 
 	return fileObj;
 }
