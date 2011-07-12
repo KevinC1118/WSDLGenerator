@@ -75,16 +75,6 @@ function build(files, boundary) {
 	return builder;
 }
 
-function timeout(time) {
-
-	var obj = document.querySelector('.dialog .timeout');
-
-	obj.innerHTML = Math.floor(time / 60000) + ' : ' + (time % 60000) / 1000;
-
-	(parseInt(time) > 0) ? setTimeout('timeout(' + parseInt(time - 1000) + ')',
-			1000) : obj.innerHTML = 'Sorry, It\'s timeout';
-}
-
 var upload = function(files) {
 
 	hideTipword();
@@ -166,14 +156,32 @@ var createFileObj = function(evt) {
 		document.body.appendChild(new UploadButton());
 };
 
+var showPanel = function(evt) {
+
+	evt.preventDefault();
+	evt.stopPropagation();
+
+	var tagList = document.querySelector('#tagList');
+	var panel = document.getElementById('settingPanel');
+
+	if (tagList.style.right && panel.style.width) {
+
+		tagList.style.right = '';
+		panel.style.width = '';
+	} else {
+		tagList.style.right = '300px';
+		panel.style.width = '300px';
+	}
+};
+
 window.onload = (function(e) {
 
 	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
-			.getElementById('file');
+			.getElementById('file'), tags = document
+			.querySelectorAll('#tagList li');
 
 	// Cancel dragover
 	buttomLayer.addEventListener('dragover', cancel, false);
-	// buttomLayer.addEventListener('dragenter', cancel, false);
 
 	buttomLayer.addEventListener('click', function(evt) {
 		fileInput.click();
@@ -181,11 +189,11 @@ window.onload = (function(e) {
 		evt.preventDefault();
 	}, false);
 
-	// Do upload
-	// buttomLayer.addEventListener('drop', upload, false);
-	// fileInput.addEventListener('change', upload, false);
-
 	buttomLayer.addEventListener('drop', createFileObj, false);
 	fileInput.addEventListener('change', createFileObj, false);
 
+	for ( var i = 0, max = tags.length; i < max; i++) {
+		tags[i].addEventListener('mouseover', showPanel, false);
+		tags[i].addEventListener('mouseover', showPanel, false);
+	}
 });
