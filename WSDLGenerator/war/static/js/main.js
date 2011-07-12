@@ -9,12 +9,6 @@ function loadstart(ev) {
 	loaderImage.src = '/static/images/ajax-loader.gif';
 	loaderImage.style.verticalAlign = 'middle';
 	loaderImage.style.display = 'inline-block';
-	// loaderImage.style.top = (document.documentElement.clientHeight -
-	// loaderImage.height)
-	// / 2 + 'px';
-	// loaderImage.style.left = (document.documentElement.clientWidth -
-	// loaderImage.width)
-	// / 2 + 'px';
 
 	div.id = 'loaderImage';
 	div.className = 'loaderImage';
@@ -87,10 +81,6 @@ var upload = function(files) {
 
 	xmlhttp.upload.addEventListener('loadstart', loadstart, false);
 
-	// xmlhttp.upload.addEventListener('load', function(ev) {
-	// progress(100, progress_inner, total_width);
-	// }, false);
-
 	xmlhttp.addEventListener('readystatechange', function(ev) {
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
 
@@ -156,29 +146,43 @@ var createFileObj = function(evt) {
 		document.body.appendChild(new UploadButton());
 };
 
-var showPanel = function(evt) {
+var showPanels = function(evt) {
 
 	evt.preventDefault();
 	evt.stopPropagation();
 
 	var tagList = document.querySelector('#tagList');
-	var panel = document.getElementById('settingPanel');
+	var panel = document.querySelector('#settingPanels');
 
-	if (tagList.style.right && panel.style.width) {
+	tagList.style.right = '300px';
+	panel.style.width = '300px';
+	panel.style.overflow = 'auto';
+};
 
-		tagList.style.right = '';
-		panel.style.width = '';
-	} else {
-		tagList.style.right = '300px';
-		panel.style.width = '300px';
+var closePanels = function(evt) {
+
+	var tagList = document.querySelector('#tagList');
+	var panel = document.querySelector('#settingPanels');
+
+	tagList.style.right = '';
+	panel.style.width = '';
+	panel.style.overflow = '';
+};
+
+var showPanel = function() {
+
+	var panels = document.querySelectorAll('#settingPanels > div');
+
+	for ( var i = 0, max = panels.length; i < max; i++) {
+		(i == parseInt(this.index)) ? panels[i].style.display = 'block'
+				: panels[i].style.display = 'none';
 	}
 };
 
-window.onload = (function(e) {
+window.onload = (function() {
 
 	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
-			.getElementById('file'), tags = document
-			.querySelectorAll('#tagList li');
+			.getElementById('file');
 
 	// Cancel dragover
 	buttomLayer.addEventListener('dragover', cancel, false);
@@ -192,8 +196,12 @@ window.onload = (function(e) {
 	buttomLayer.addEventListener('drop', createFileObj, false);
 	fileInput.addEventListener('change', createFileObj, false);
 
+	var tags = document.querySelectorAll('#tagList>li');
 	for ( var i = 0, max = tags.length; i < max; i++) {
-		tags[i].addEventListener('mouseover', showPanel, false);
-		tags[i].addEventListener('mouseover', showPanel, false);
+		tags[i].addEventListener('mouseover', showPanels, false);
+		tags[i].addEventListener('click', (function() {
+			tags[i].index = i;
+			return showPanel;
+		})(), false);
 	}
 });
