@@ -4,7 +4,7 @@
 
 function Dialog() {
 
-	this.content = "";
+	this.uuid = null;
 
 	var dialog = document.createElement('div');
 
@@ -16,6 +16,18 @@ function Dialog() {
 	dialog.appendChild(c);
 	/* ++ */
 
+	var link = document.createElement('a');
+	c.appendChild(link);
+
+	var downloadImage = new Image();
+	downloadImage.src = '/static/images/Download.png';
+	link.appendChild(downloadImage);
+
+	var downloadspan = document.createElement('span');
+	downloadspan.innerHTML = 'Download';
+	downloadspan.style.display = 'block';
+	link.appendChild(downloadspan);
+
 	/* close image button */
 	var closeImage = new Image();
 	closeImage.src = '/static/images/close.gif';
@@ -24,12 +36,11 @@ function Dialog() {
 	closeImage.style.right = '5px';
 	closeImage.style.cursor = 'pointer';
 	dialog.appendChild(closeImage);
-	
+
 	var timeoutspan = document.createElement('span');
 	timeoutspan.className = 'timeout';
-	timeoutspan.to = timeout;
 	dialog.appendChild(timeoutspan);
-	
+
 	closeImage.addEventListener('click', function() {
 		document.body.removeChild(dialog);
 		window.location.href = '/';
@@ -37,9 +48,9 @@ function Dialog() {
 
 	this.show = function() {
 
-		c.innerHTML = this.content;
+		link.href = '/Download?' + this.uuid;
 		document.body.appendChild(dialog);
-		timeoutspan.to(600000);
+		timeout(600000);
 	};
 }
 

@@ -77,16 +77,12 @@ function build(files, boundary) {
 
 function timeout(time) {
 
-	// var to = document.getElementById('timeout');
+	var obj = document.querySelector('.dialog .timeout');
 
-	this.innerHTML = Math.floor(time / 60000) + ' minute <span class="second">'
-			+ (time % 60000) / 1000 + '</span> second remaining';
+	obj.innerHTML = Math.floor(time / 60000) + ' : ' + (time % 60000) / 1000;
 
-	// var second_clone = to.getElementsByTagName('span')[0].cloneNode(true);
-	// second_clone.style.fontSize = '20px';
-
-	(time > 0) ? setTimeout('timeout(' + (time - 1000) + ')', 1000)
-			: this.innerHTML = 'Sorry, It\'s timeout.';
+	(parseInt(time) > 0) ? setTimeout('timeout(' + parseInt(time - 1000) + ')',
+			1000) : obj.innerHTML = 'Sorry, It\'s timeout';
 }
 
 var upload = function(files) {
@@ -111,8 +107,7 @@ var upload = function(files) {
 			var dialog = new Dialog(), resptxt = xmlhttp.responseText
 					.split(',');
 
-			dialog.content = '<a href="/Download?' + resptxt[1]
-					+ '">Download</a>';
+			dialog.uuid = resptxt[1];
 
 			document.body.removeChild(document.getElementById('loaderImage'));
 
