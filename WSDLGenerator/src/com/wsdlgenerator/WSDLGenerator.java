@@ -48,7 +48,6 @@ import com.ibm.wsdl.extensions.soap.SOAPBindingImpl;
 import com.ibm.wsdl.extensions.soap.SOAPBodyImpl;
 import com.wsdlgenerator.model.ExcelFile;
 import com.wsdlgenerator.model.GeneratedFile;
-import com.wsdlgenerator.util.MyProperties;
 
 /**
  * @author Kevin.C
@@ -59,7 +58,7 @@ public class WSDLGenerator extends AbstractGenerator {
 	private static final Logger LOGGER = Logger.getLogger(WSDLGenerator.class
 			.getName());
 	private List<GeneratedFile> wsdlFiles = new ArrayList<GeneratedFile>();
-	private static final Properties PROP = MyProperties.getProperties();
+
 	private WSDLFactory wsdlFactory;
 	private String fileName;
 
@@ -74,8 +73,8 @@ public class WSDLGenerator extends AbstractGenerator {
 	/**
 	 * @param dataSource
 	 */
-	public WSDLGenerator(List<ExcelFile> excelFiles) {
-		super(excelFiles);
+	public WSDLGenerator(List<ExcelFile> excelFiles, Properties prop) {
+		super(excelFiles, prop);
 		execute();
 	}
 
@@ -146,17 +145,17 @@ public class WSDLGenerator extends AbstractGenerator {
 		Definition definition = wsdlFactory.newDefinition();
 
 		// Set TargetNamespace
-		definition.setTargetNamespace(new StringBuffer(PROP
+		definition.setTargetNamespace(new StringBuffer(getProperty()
 				.getProperty("excel2wsdl.lancer.namespace.url"))
 				.append(fileName).append(".").append(serviceName.toUpperCase())
 				.append(".wsdl").toString());
 
 		definition.addNamespace("soap",
-				PROP.getProperty("excel2wsdl.namespace.soap"));
+				getProperty().getProperty("excel2wsdl.namespace.soap"));
 		definition.addNamespace("wsdl",
-				PROP.getProperty("excel2wsdl.namespace.wsdl"));
+				getProperty().getProperty("excel2wsdl.namespace.wsdl"));
 		definition.addNamespace("xsd",
-				PROP.getProperty("excel2wsdl.namespace.xsd"));
+				getProperty().getProperty("excel2wsdl.namespace.xsd"));
 		definition.addNamespace("tns", definition.getTargetNamespace());
 		definition
 				.setQName(new QName(definition.getTargetNamespace(), fileName));
@@ -165,10 +164,10 @@ public class WSDLGenerator extends AbstractGenerator {
 		// http://{lancer.namespace.url}/UC_DIS_SALESORDER.QRYSALESORDER
 		definition.addNamespace(
 				serviceName.trim().toLowerCase(),
-				new StringBuffer(PROP
-						.getProperty("excel2wsdl.lancer.namespace.url"))
-						.append(fileName).append(".")
-						.append(serviceName.trim().toUpperCase()).toString());
+				new StringBuffer(getProperty().getProperty(
+						"excel2wsdl.lancer.namespace.url")).append(fileName)
+						.append(".").append(serviceName.trim().toUpperCase())
+						.toString());
 
 		return definition;
 	}
@@ -194,7 +193,8 @@ public class WSDLGenerator extends AbstractGenerator {
 		// set message's name
 		message.setQName(new QName(namespace.get("tns").toString(),
 				new StringBuffer(serviceName.toUpperCase()).append(
-						PROP.getProperty("excel2wsdl.message.request.suffix"))
+						getProperty().getProperty(
+								"excel2wsdl.message.request.suffix"))
 						.toString()));
 		message.setUndefined(false);
 
@@ -213,7 +213,8 @@ public class WSDLGenerator extends AbstractGenerator {
 		message.addPart(part);
 		message.setQName(new QName(namespace.get("tns").toString(),
 				new StringBuffer(serviceName.toUpperCase()).append(
-						PROP.getProperty("excel2wsdl.message.response.suffix"))
+						getProperty().getProperty(
+								"excel2wsdl.message.response.suffix"))
 						.toString()));
 		message.setUndefined(false);
 
@@ -238,12 +239,12 @@ public class WSDLGenerator extends AbstractGenerator {
 
 		input.setMessage((Message) message.get(new QName(namespace.get("tns")
 				.toString(), new StringBuffer(serviceName).append(
-				PROP.getProperty("excel2wsdl.message.request.suffix"))
+				getProperty().getProperty("excel2wsdl.message.request.suffix"))
 				.toString())));
 		output.setMessage((Message) message.get(new QName(namespace.get("tns")
-				.toString(), new StringBuffer(serviceName).append(
-				PROP.getProperty("excel2wsdl.message.response.suffix"))
-				.toString())));
+				.toString(), new StringBuffer(serviceName)
+				.append(getProperty().getProperty(
+						"excel2wsdl.message.response.suffix")).toString())));
 
 		operation.setInput(input);
 		operation.setOutput(output);
@@ -272,12 +273,13 @@ public class WSDLGenerator extends AbstractGenerator {
 		SOAPBody soapBody;
 
 		soapBinding = new SOAPBindingImpl();
-		soapBinding.setStyle(PROP.getProperty("excel2wsdl.soapbinding.style"));
-		soapBinding.setTransportURI(PROP
-				.getProperty("excel2wsdl.soapbinding.transport"));
+		soapBinding.setStyle(getProperty().getProperty(
+				"excel2wsdl.soapbinding.style"));
+		soapBinding.setTransportURI(getProperty().getProperty(
+				"excel2wsdl.soapbinding.transport"));
 
 		soapBody = new SOAPBodyImpl();
-		soapBody.setUse(PROP.getProperty("excel2wsdl.soapbody.use"));
+		soapBody.setUse(getProperty().getProperty("excel2wsdl.soapbody.use"));
 
 		bindingInput = definition.createBindingInput();
 		bindingInput.addExtensibilityElement(soapBody);
@@ -294,7 +296,7 @@ public class WSDLGenerator extends AbstractGenerator {
 
 		binding.setQName(new QName(namespace.get("tns").toString(),
 				new StringBuffer(serviceName.toUpperCase()).append(
-						PROP.getProperty("excel2wsdl.binding.suffix"))
+						getProperty().getProperty("excel2wsdl.binding.suffix"))
 						.toString()));
 		binding.setPortType((PortType) portTypes.get(new QName(namespace.get(
 				"tns").toString(), serviceName)));
@@ -318,15 +320,15 @@ public class WSDLGenerator extends AbstractGenerator {
 		port = definition.createPort();
 
 		soapAddress = new SOAPAddressImpl();
-		soapAddress.setLocationURI(new StringBuffer(PROP
-				.getProperty("excel2wsdl.soapaddress.location"))
+		soapAddress.setLocationURI(new StringBuffer(getProperty().getProperty(
+				"excel2wsdl.soapaddress.location"))
 				.append(definition.getQName().getLocalPart()).append('_')
 				.append(serviceName.toUpperCase()).toString());
 
 		port.addExtensibilityElement(soapAddress);
 		port.setBinding((Binding) bindings.get(new QName(namespace.get("tns")
 				.toString(), new StringBuffer(serviceName.toUpperCase())
-				.append(PROP.getProperty("excel2wsdl.binding.suffix"))
+				.append(getProperty().getProperty("excel2wsdl.binding.suffix"))
 				.toString())));
 
 		port.setName(new StringBuffer(definition.getQName().getLocalPart())
@@ -335,7 +337,7 @@ public class WSDLGenerator extends AbstractGenerator {
 		service.addPort(port);
 		service.setQName(new QName(namespace.get("tns").toString(),
 				new StringBuffer(serviceName.toUpperCase()).append(
-						PROP.getProperty("excel2wsdl.service.suffix"))
+						getProperty().getProperty("excel2wsdl.service.suffix"))
 						.toString()));
 
 		definition.addService(service);
@@ -353,13 +355,13 @@ public class WSDLGenerator extends AbstractGenerator {
 		try {
 			Document document = builder.build(inputStream);
 
-			Element types = new Element("types", "wsdl",
-					PROP.getProperty("excel2wsdl.namespace.wsdl"));
+			Element types = new Element("types", "wsdl", getProperty()
+					.getProperty("excel2wsdl.namespace.wsdl"));
 
-			Element schema = new Element("schema", "xsd",
-					PROP.getProperty("excel2wsdl.namespace.xsd"));
-			Element schemaImport = new Element("import", "xsd",
-					PROP.getProperty("excel2wsdl.namespace.xsd"));
+			Element schema = new Element("schema", "xsd", getProperty()
+					.getProperty("excel2wsdl.namespace.xsd"));
+			Element schemaImport = new Element("import", "xsd", getProperty()
+					.getProperty("excel2wsdl.namespace.xsd"));
 			schemaImport.setAttribute("namespace",
 					namespace.get(serviceName.toLowerCase().trim()).toString());
 			schemaImport.setAttribute("schemaLocation",

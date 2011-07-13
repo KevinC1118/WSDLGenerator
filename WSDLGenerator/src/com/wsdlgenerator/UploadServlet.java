@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -27,6 +28,7 @@ import com.wsdlgenerator.model.ExcelFile;
 import com.wsdlgenerator.model.GeneratedFile;
 import com.wsdlgenerator.util.CommonUtil;
 import com.wsdlgenerator.util.ExcelParser;
+import com.wsdlgenerator.util.MyProperties;
 
 /**
  * @author Kevin.C
@@ -46,6 +48,8 @@ public class UploadServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+
+		Properties prop = MyProperties.getProperties();
 
 		QuotaService quotaService = QuotaServiceFactory.getQuotaService();
 		long start = quotaService.getCpuTimeInMegaCycles();
@@ -80,6 +84,13 @@ public class UploadServlet extends HttpServlet {
 					value = outputStream.toString();
 
 					outputStream.close();
+
+					if (!value.equals("")) {
+						if (fieldName.equals("addressLocation")) {
+							prop.setProperty("excel2wsdl.soapaddress.location",
+									value);
+						}
+					}
 
 				} else {
 
@@ -116,12 +127,12 @@ public class UploadServlet extends HttpServlet {
 			}
 
 			// generate wsdl file
-			generatedFiles.addAll(AbstractGenerator
-					.getWSDLGenerator(excelFiles).getGeneratedFiles());
+			generatedFiles.addAll(new WSDLGenerator(excelFiles, prop)
+					.getGeneratedFiles());
 
 			// generate schema file
-			generatedFiles.addAll(AbstractGenerator.getSchemaGenerator(
-					excelFiles).getGeneratedFiles());
+			generatedFiles.addAll(new SchemaGenerator(excelFiles, prop)
+					.getGeneratedFiles());
 
 			CommonUtil.getCache().put(req.getSession().getId(),
 					new CommonUtil().toZip(generatedFiles));

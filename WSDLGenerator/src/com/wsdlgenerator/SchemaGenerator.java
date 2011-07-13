@@ -28,7 +28,6 @@ import com.wsdlgenerator.model.ExcelFile;
 import com.wsdlgenerator.model.GeneratedFile;
 import com.wsdlgenerator.model.RowObject;
 import com.wsdlgenerator.util.CommonUtil;
-import com.wsdlgenerator.util.MyProperties;
 
 /**
  * @author Kevin.C
@@ -39,19 +38,20 @@ public class SchemaGenerator extends AbstractGenerator {
 	private List<GeneratedFile> schemaFiles = new ArrayList<GeneratedFile>();
 	private static final Logger LOGGER = Logger.getLogger(SchemaGenerator.class
 			.getName());
-	private static final Properties prop = MyProperties.getProperties();
+	// private static final Properties getProperty() =
+	// MyProperties.getProperties();
 	private SchemaDocument schemaDocument;
 	private ParentStackDAO parentStackDAO;
 	private String _msgName;
 	private ExcelFile ef;
-	
+
 	private CommonUtil util = new CommonUtil();
-	
+
 	/**
 	 * @param dataSource
 	 */
-	public SchemaGenerator(List<ExcelFile> excelFiles) {
-		super(excelFiles);
+	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop) {
+		super(excelFiles, prop);
 		execute();
 	}
 
@@ -131,16 +131,15 @@ public class SchemaGenerator extends AbstractGenerator {
 	private void namespaceGenerate(String msgName) {
 
 		Schema schema = schemaDocument.addNewSchema();
-		schema.setTargetNamespace(new StringBuffer(prop
-				.getProperty("excel2wsdl.lancer.namespace.url"))
-				.append(msgName).toString());
+		schema.setTargetNamespace(new StringBuffer(getProperty().getProperty(
+				"excel2wsdl.lancer.namespace.url")).append(msgName).toString());
 
 		XmlCursor xmlCursor = schemaDocument.newCursor();
 
 		if (xmlCursor.toFirstChild() & xmlCursor.toFirstAttribute()) {
 			xmlCursor.insertNamespace("tns", schema.getTargetNamespace());
 			xmlCursor.insertNamespace("",
-					prop.getProperty("excel2wsdl.namespace.xsd"));
+					getProperty().getProperty("excel2wsdl.namespace.xsd"));
 		}
 	}
 
@@ -371,8 +370,8 @@ public class SchemaGenerator extends AbstractGenerator {
 	 */
 	private void generateSimpleElement(RowObject rowObject, Element element) {
 
-		if (Boolean.parseBoolean(prop
-				.getProperty("excel2wsdl.hasNecessaryValue"))) {
+		if (Boolean.parseBoolean(getProperty().getProperty(
+				"excel2wsdl.hasNecessaryValue"))) {
 			if (rowObject.isNecessary()) { // 必傳
 				element.setMinOccurs(new BigInteger("1"));
 				element.setMaxOccurs(1);
@@ -394,8 +393,8 @@ public class SchemaGenerator extends AbstractGenerator {
 	 */
 	private void generateRefElement(RowObject rowObject, Element element) {
 		// 有必傳值
-		if (Boolean.parseBoolean(prop
-				.getProperty("excel2wsdl.hasNecessaryValue"))) {
+		if (Boolean.parseBoolean(getProperty().getProperty(
+				"excel2wsdl.hasNecessaryValue"))) {
 			if (rowObject.isNecessary()) { // 必傳
 				element.setMinOccurs(new BigInteger("1"));
 				element.setMaxOccurs(AllNNI.Member.UNBOUNDED);
