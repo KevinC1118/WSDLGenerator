@@ -1,10 +1,8 @@
-body
-{
+body {
 	user-select: none;
 }
 
-#buttomLayer
-{
+#buttomLayer {
 	position: absolute;
 	top: 2px;
 	left: 2px;
@@ -16,6 +14,18 @@ body
 	text-align: center;
 	border: dashed 6px #BEBEBE;
 	background-color: white;
+}
+
+#tipword {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	height: 1em;
+	font-style: italic;
+	color: #B1B1B1;
 }
 
 #fileList {
@@ -32,34 +42,29 @@ body
 	width: 130px;
 }
 
-#file
-{
+#file {
 	position: absolute;
 	display: none;
 }
 
-#uploadButton
-{
+#uploadButton {
 	position: absolute;
 	bottom: 10px;
 	right: 10px;
 }
 
-#tagList
-{
+#tagList {
 	position: absolute;
 	display: inline;
-	color: white;
 	z-index: 75;
 	margin: 0;
-	top: 0;
+	top: 3px;
 	right: 0;
 	-moz-transition: right 1s;
 	list-style-type: none;
 }
 
-#tagList li
-{
+#tagList li {
 	word-wrap: break-word;
 	padding: 5px 15px 5px 10px;
 	box-shadow: -3px 3px 5px #525252;
@@ -68,44 +73,38 @@ body
 	border-bottom-left-radius: 10px;
 	-moz-transition: right 1s;
 	-moz-user-select: none;
-	width: 15px;
 	border: solid 1px #3C3C3C;
+	width: 9px;
 }
 
-#tagList li span
-{
+#tagList li span {
 	transform: rotate(90deg);
 	-moz-transform: rotate(90deg);
 	-webkit-transform: rotate(90deg);
 	-ms-transform: rotate(90deg);
 }
 
-#settingTag
-{
-	background-color: blue;
+#settingTag {
+	background-color: #2D33A1;
 }
 
-#settingTag > div
-{
+#settingTag>div {
 	background: url("/static/images/tags.png") no-repeat 0 0;
 	height: 64px;
 	width: 19px;
 }
 
-#gdTag
-{
-	background-color: red;
+#gdTag {
+	background-color: #E91414;
 }
 
-#gdTag > div
-{
+#gdTag>div {
 	background: url("/static/images/tags.png") no-repeat -19px 0px;
 	height: 95px;
 	width: 19px;
 }
 
-#settingPanels
-{
+#settingPanels {
 	position: absolute;
 	z-index: 75;
 	top: 0;
@@ -120,30 +119,25 @@ body
 	box-shadow: -3px 3px 5px #525252;
 }
 
-#settingPanels > DIV
-{
+#settingPanels>DIV {
 	padding: 10px;
 	width: 280px;
 	display: none;
 }
 
-#settingPanels > DIV:FIRST-CHILD
-{
+#settingPanels>DIV:FIRST-CHILD {
 	display: block;
 }
 
-#settingPanels > DIV DIV
-{
+#settingPanels>DIV DIV {
 	padding: 5px;
 }
 
-#settingPanels span
-{
+#settingPanels span {
 	font-size: 0.8em;
 }
 
-.mask
-{
+.mask {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -154,8 +148,7 @@ body
 	z-index: 100;
 }
 
-.loaderImage
-{
+#loaderImage {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -167,8 +160,7 @@ body
 	z-index: 200;
 }
 
-.dialog
-{
+.dialog {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -188,8 +180,7 @@ body
 	/*-moz-box-shadow: 0 0 9px #000000;*/
 }
 
-.content
-{
+.content {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -200,14 +191,12 @@ body
 	display: inline-block;
 }
 
-.content *
-{
+.content * {
 	text-decoration: none;
-	line-height: 1em;	
+	line-height: 1em;
 }
 
-.fileObj
-{
+.fileObj {
 	height: 110px;
 	border: none;
 	display: block;
@@ -216,19 +205,16 @@ body
 	vertical-align: bottom;
 }
 
-.fileObj span
-{
+.fileObj span {
 	word-wrap: break-word;
 	font-style: italic;
 }
 
-.fileObj img
-{
+.fileObj img {
 	cursor: pointer;
 }
 
-.timeout
-{
+.timeout {
 	position: absolute;
 	bottom: 5px;
 	left: 5px;

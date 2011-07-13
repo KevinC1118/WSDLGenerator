@@ -11,7 +11,6 @@ function loadstart(ev) {
 	loaderImage.style.display = 'inline-block';
 
 	div.id = 'loaderImage';
-	div.className = 'loaderImage';
 
 	percent.id = 'percent';
 	percent.style.display = 'block';
@@ -25,79 +24,6 @@ function loadstart(ev) {
 	div.appendChild(percent);
 	document.body.appendChild(div);
 }
-
-function build(files, boundary) {
-
-	var dashdash = '--', crlf = '\r\n', builder = '';
-
-	builder += 'content-disposition: form-data';
-	builder += crlf;
-	builder += 'Content-Type: application/octet-stream, boundary=' + boundary;
-	builder += crlf;
-
-	var len = files.length;
-	for ( var i = 0; i < len; i++) {
-
-		builder += dashdash;
-		builder += boundary;
-		builder += crlf;
-
-		var file = files[i];
-		/* Generate headers. */
-		builder += 'Content-Disposition: form-data; name="file"';
-		if (file.fileName) {
-			builder += '; filename="' + file.fileName + '"';
-		}
-		builder += crlf;
-
-		builder += 'Content-Type: application/octet-stream';
-		builder += crlf;
-		builder += crlf;
-
-		/* Append binary data. */
-		builder += file.getAsBinary();
-		builder += crlf;
-
-	}
-
-	/* Mark end of the request. */
-	builder += dashdash;
-	builder += boundary;
-	builder += dashdash;
-	builder += crlf;
-
-	return builder;
-}
-
-var upload = function(files) {
-
-	hideTipword();
-
-	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = 'fdsfwefFDSF';
-
-	xmlhttp.open('POST', url, true);
-	xmlhttp.setRequestHeader('Content-type', 'multipart/form-data; boundary='
-			+ boundary);
-
-	xmlhttp.upload.addEventListener('loadstart', loadstart, false);
-
-	xmlhttp.addEventListener('readystatechange', function(ev) {
-		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
-
-			var dialog = new Dialog(), resptxt = xmlhttp.responseText
-					.split(',');
-
-			dialog.uuid = resptxt[1];
-
-			document.body.removeChild(document.getElementById('loaderImage'));
-
-			dialog.show();
-		}
-		// showDialog(xmlhttp.responseText.split(','));
-	}, false);
-
-	xmlhttp.sendAsBinary(build(files, boundary));
-};
 
 function hideTipword() {
 	document.getElementById('tipword').style.visibility = 'hidden';

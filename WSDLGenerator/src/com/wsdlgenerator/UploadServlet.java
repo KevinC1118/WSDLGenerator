@@ -61,35 +61,58 @@ public class UploadServlet extends HttpServlet {
 				FileItemStream itemStream = itemIterator.next();
 				InputStream stream = itemStream.openStream();
 
-				byte[] bs = new byte[8192];
+				if (itemStream.isFormField()) {
 
-				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+					String fieldName, value;
 
-				int len;
-				while ((len = stream.read(bs, 0, bs.length)) != -1) {
-					arrayOutputStream.write(bs, 0, len);
+					fieldName = itemStream.getFieldName();
+
+					byte[] bs = new byte[1024];
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+					int len;
+					while ((len = stream.read(bs, 0, bs.length)) != -1)
+						outputStream.write(bs, 0, len);
+
+					outputStream.flush();
+					stream.close();
+
+					value = outputStream.toString();
+
+					outputStream.close();
+
+				} else {
+
+					byte[] bs = new byte[8192];
+
+					ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+					int len;
+					while ((len = stream.read(bs, 0, bs.length)) != -1) {
+						arrayOutputStream.write(bs, 0, len);
+					}
+
+					Blob blob = new Blob(arrayOutputStream.toByteArray());
+					stream.close();
+					arrayOutputStream.close();
+
+					ExcelFile excelFile = new ExcelFile();
+					ExcelParser excelParser = new ExcelParser();
+					// GeneratedFile generatedFile = new GeneratedFile();
+					List<Object> list = excelParser
+							.getReqAndRespAndServFromExcel(blob,
+									itemStream.getName());
+
+					excelFile.setName(itemStream.getName());
+					excelFile.setBlob(blob);
+					excelFile.setServices((Set<String>) list.get(0));
+					excelFile.setRequestMsg((Map<String, Collection<?>>) list
+							.get(1));
+					excelFile.setResponseMsg((Map<String, Collection<?>>) list
+							.get(2));
+
+					excelFiles.add(excelFile);
 				}
-
-				Blob blob = new Blob(arrayOutputStream.toByteArray());
-				stream.close();
-				arrayOutputStream.close();
-
-				ExcelFile excelFile = new ExcelFile();
-				ExcelParser excelParser = new ExcelParser();
-				// GeneratedFile generatedFile = new GeneratedFile();
-				List<Object> list = excelParser.getReqAndRespAndServFromExcel(
-						blob, itemStream.getName());
-
-				excelFile.setName(itemStream.getName());
-				excelFile.setBlob(blob);
-				excelFile.setServices((Set<String>) list.get(0));
-				excelFile.setRequestMsg((Map<String, Collection<?>>) list
-						.get(1));
-				excelFile.setResponseMsg((Map<String, Collection<?>>) list
-						.get(2));
-
-				excelFiles.add(excelFile);
-
 			}
 
 			// generate wsdl file
@@ -101,7 +124,7 @@ public class UploadServlet extends HttpServlet {
 					excelFiles).getGeneratedFiles());
 
 			CommonUtil.getCache().put(req.getSession().getId(),
-					CommonUtil.toZip(generatedFiles));
+					new CommonUtil().toZip(generatedFiles));
 
 			long end = quotaService.getCpuTimeInMegaCycles();
 
@@ -115,7 +138,6 @@ public class UploadServlet extends HttpServlet {
 		} catch (FileUploadException e) {
 			LOGGER.warning(e.toString());
 		}
-		// TODO
 	}
 
 }

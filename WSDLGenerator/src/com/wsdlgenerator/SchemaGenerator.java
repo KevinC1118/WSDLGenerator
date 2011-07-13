@@ -44,7 +44,9 @@ public class SchemaGenerator extends AbstractGenerator {
 	private ParentStackDAO parentStackDAO;
 	private String _msgName;
 	private ExcelFile ef;
-
+	
+	private CommonUtil util = new CommonUtil();
+	
 	/**
 	 * @param dataSource
 	 */
@@ -335,7 +337,7 @@ public class SchemaGenerator extends AbstractGenerator {
 		element.setName(rowObject.getKey().trim());
 
 		String type = rowObject.getType().trim();
-		QName qType = CommonUtil.getSchemaSimpleType(type);
+		QName qType = util.getSchemaSimpleType(type);
 		/*
 		 * 判斷是否為LIST型態 是, maxOccurs="unbounded" 否, maxOccurs="1" - default
 		 */

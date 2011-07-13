@@ -52,41 +52,42 @@ public class CommonUtil {
 		return cache;
 	}
 
-	public static Blob toZip(List<GeneratedFile> files) {
+	public Blob toZip(List<GeneratedFile> files) {
 
 		ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 		Blob blob;
 		ZipOutputStream zos;
 		try {
 
-			zos = new ZipOutputStream(arrayOutputStream);
-			GeneratedFile file;
+			if (files.size() > 0) {
+				zos = new ZipOutputStream(arrayOutputStream);
+				GeneratedFile file;
 
-			for (int i = 0, max = files.size(); i < max; i++) {
+				for (int i = 0, max = files.size(); i < max; i++) {
 
-				file = files.get(i);
-				zos.putNextEntry(new ZipEntry(file.getName()));
-				zos.write(file.getBlob().getBytes());
+					file = files.get(i);
+					zos.putNextEntry(new ZipEntry(file.getName()));
+					zos.write(file.getBlob().getBytes());
 
-				zos.closeEntry();
+					zos.closeEntry();
+				}
+
+				arrayOutputStream.flush();
+				zos.flush();
+				arrayOutputStream.close();
+				zos.close();
+
+				blob = new Blob(arrayOutputStream.toByteArray());
+
+				return blob;
 			}
-
-			arrayOutputStream.flush();
-			zos.flush();
-			arrayOutputStream.close();
-			zos.close();
-
-			blob = new Blob(arrayOutputStream.toByteArray());
-
-			return blob;
-
 		} catch (IOException e) {
 			LOGGER.warning(e.toString());
 		}
 		return null;
 	}
 
-	public static QName getSchemaSimpleType(String arg0) {
+	public QName getSchemaSimpleType(String arg0) {
 
 		String namespace = prop.getProperty("excel2wsdl.namespace.xsd");
 

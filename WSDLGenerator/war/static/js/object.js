@@ -107,7 +107,10 @@ function timeout(time) {
 
 	var obj = document.querySelector('.dialog .timeout');
 
-	obj.innerHTML = Math.floor(time / 60000) + ' : ' + (time % 60000) / 1000;
+	obj.innerHTML = Math.floor(time / 60000) + ' : ' + (function() {
+		var t = (time % 60000 / 1000).toString();
+		return (t.length == 1) ? '0' + t : t;
+	})();
 
 	(parseInt(time) > 0) ? setTimeout('timeout(' + parseInt(time - 1000) + ')',
 			1000) : obj.innerHTML = 'Sorry, It\'s timeout';
