@@ -105,6 +105,45 @@ var showPanel = function() {
 	}
 };
 
+function showTooltip(evt) {
+
+	if (!evt.target.parentNode.querySelector('.unprovided')) {
+		var unp = new Image(72);
+		unp.className = 'unprovided';
+		unp.src = '/static/images/unprovided.png';
+		unp.onload = function() {
+			var op = function() {
+
+				if (unp) {
+
+					if (unp.style.opacity < 1) {
+
+						if (unp.style.opacity)
+							unp.style.opacity = parseFloat(unp.style.opacity) + 0.1;
+						else
+							unp.style.opacity = '0.1';
+					} else
+						stop();
+
+				}
+			};
+			var it = setInterval(op, 5);
+			function stop() {
+				clearInterval(it);
+			}
+		};
+
+		this.parentNode.appendChild(unp);
+	}
+}
+
+function hideTooltip(evt) {
+
+	var p = evt.target.parentNode;
+	var img = p.querySelector('.unprovided');
+	p.removeChild(img);
+}
+
 window.onload = (function() {
 
 	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
@@ -115,8 +154,6 @@ window.onload = (function() {
 
 	buttomLayer.addEventListener('click', function(evt) {
 		fileInput.click();
-		evt.stopPropagation();
-		evt.preventDefault();
 	}, false);
 
 	buttomLayer.addEventListener('drop', createFileObj, false);
@@ -130,4 +167,26 @@ window.onload = (function() {
 			return showPanel;
 		})(), false);
 	}
+
+	document.getElementsByName('addressLocation')[0].onblur = function(evt) {
+
+		var value = this.value;
+
+		var pattern = /^http:\/\/.+\/$/ig;
+
+		if (!pattern.test(value)) {
+			// TODO
+		}
+	};
+
+	document.getElementsByName('snPosition')[0].onmouseover = showTooltip;
+	document.getElementsByName('snPosition')[0].onmouseout = hideTooltip;
+	document.getElementsByName('levelIndex')[0].onmouseover = showTooltip;
+	document.getElementsByName('levelIndex')[0].onmouseout = hideTooltip;
+	document.getElementsByName('keyIndex')[0].onmouseover = showTooltip;
+	document.getElementsByName('keyIndex')[0].onmouseout = hideTooltip;
+	document.getElementsByName('typeIndex')[0].onmouseover = showTooltip;
+	document.getElementsByName('typeIndex')[0].onmouseout = hideTooltip;
+	document.getElementById('save').onmouseover = showTooltip;
+	document.getElementById('save').onmouseout = hideTooltip;
 });
