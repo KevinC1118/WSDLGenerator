@@ -87,21 +87,20 @@ public class CommonUtil {
 		return null;
 	}
 
-	public QName getSchemaSimpleType(String arg0) {
+	public QName getSchemaSimpleType(String arg0) throws InterruptedException {
 
 		String namespace = prop.getProperty("excel2wsdl.namespace.xsd");
 
 		String tmp = arg0.trim();
 
-		if (Pattern.matches(".*STRING$", tmp)) // STRING & LIST OF
-												// STRING
+		if (Pattern.matches(".*STRING$", tmp)) // STRING & LIST OF STRING
 			return new QName(namespace, "string");
 		else if (Pattern.matches("^INTEGER$", tmp)) // INTEGER
 			return new QName(namespace, "int");
 		else if (Pattern.matches("^DECIMAL$", tmp)) // DECIMAL
 			return new QName(namespace, "decimal");
 		else {
-			return null;
+			throw new InterruptedException();
 		}
 	}
 }

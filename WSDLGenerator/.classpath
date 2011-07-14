@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xbean.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xmlschema.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-1.7.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

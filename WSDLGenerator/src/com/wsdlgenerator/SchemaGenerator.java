@@ -49,13 +49,14 @@ public class SchemaGenerator extends AbstractGenerator {
 
 	/**
 	 * @param dataSource
+	 * @throws InterruptedException 
 	 */
-	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop) {
+	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop) throws InterruptedException {
 		super(excelFiles, prop);
 		execute();
 	}
 
-	private void execute() {
+	private void execute() throws InterruptedException {
 
 		for (Iterator<ExcelFile> ite = super.getExcelFiles().iterator(); ite
 				.hasNext();) {
@@ -67,8 +68,8 @@ public class SchemaGenerator extends AbstractGenerator {
 			// String msgName;
 			String tmp;
 			while (services.hasNext()) {
+
 				schemaDocument = SchemaDocument.Factory.newInstance();
-				// schemaDocument.getSchema().getElementArray()[0].getComplexType().getSequence().getElementArray().
 				_msgName = services.next();
 
 				// ex: UC_DIS_SALESORDER.QRYSALESORDER
@@ -80,13 +81,16 @@ public class SchemaGenerator extends AbstractGenerator {
 				// msgName));
 				tmp = new StringBuffer(ef.getName()).append(".")
 						.append(_msgName).toString();
-				if (requestMsgGenerate(tmp) & responseMsgGenerate(tmp))
-					save(new StringBuffer(ef.getName()).append("_")
-							.append(_msgName).toString());
-				else
-					LOGGER.warning(String.format("%s generate failure!!!",
-							_msgName));
-
+				try {
+					if (requestMsgGenerate(tmp) & responseMsgGenerate(tmp))
+						save(new StringBuffer(ef.getName()).append("_")
+								.append(_msgName).toString());
+					else
+						LOGGER.warning(String.format("%s generate failure!!!",
+								_msgName));
+				} catch (InterruptedException e) {
+					throw new InterruptedException("err," + e.getMessage() + " in " + ef.getName());
+				}
 			}
 		}
 	}
@@ -170,7 +174,7 @@ public class SchemaGenerator extends AbstractGenerator {
 		}
 	}
 
-	private boolean responseMsgGenerate(String msgName) {
+	private boolean responseMsgGenerate(String msgName) throws InterruptedException {
 		if (schemaDocument == null)
 			return false;
 		if (schemaDocument.getSchema() == null)
@@ -182,14 +186,11 @@ public class SchemaGenerator extends AbstractGenerator {
 		Schema schema = schemaDocument.getSchema();
 		String responseMsgName = new StringBuffer(msgName).append("Response")
 				.toString();
-		try {
-			addTopLevelElement(schema, responseMsgName, (ArrayList<?>) ef
-					.getResponseMsg().get(responseMsgName), null);
-			return true;
-		} catch (Exception e) {
-			LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
-			return false;
-		}
+		addTopLevelElement(schema, responseMsgName, (ArrayList<?>) ef
+				.getResponseMsg().get(responseMsgName), null);
+		return true;
+
+//		LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
 	}
 
 	/**
@@ -201,10 +202,12 @@ public class SchemaGenerator extends AbstractGenerator {
 	 *            Element's name
 	 * @param elementList
 	 *            Element list
+	 * @throws InterruptedException
 	 * 
 	 */
 	private void addTopLevelElement(Schema schema, String elementName,
-			ArrayList<?> elementList, RowObject parentRowObject) {
+			ArrayList<?> elementList, RowObject parentRowObject)
+			throws InterruptedException {
 
 		// 作為遞迴時傳給自己的array list
 		ArrayList<?> elList;
@@ -330,33 +333,43 @@ public class SchemaGenerator extends AbstractGenerator {
 	 * 
 	 * @param element
 	 * @param rowObject
+	 * @throws InterruptedException
 	 */
-	private void addLocalElement(Element element, RowObject rowObject) {
+	private void addLocalElement(Element element, RowObject rowObject)
+			throws InterruptedException {
 
 		element.setName(rowObject.getKey().trim());
 
 		String type = rowObject.getType().trim();
-		QName qType = util.getSchemaSimpleType(type);
+		QName qType = new QName("");
+		try {
+			qType = util.getSchemaSimpleType(type);
+
+		} catch (InterruptedException e) {
+			throw new InterruptedException(String.format(
+					"Unrecognize type %s in %s", type, _msgName));
+		}
 		/*
 		 * 判斷是否為LIST型態 是, maxOccurs="unbounded" 否, maxOccurs="1" - default
 		 */
 		if (Pattern.matches("^LIST.*", type)) { // Is LIST
 												// type
-			if (qType != null)
-				element.setType(qType);
-			else
-				LOGGER.warning(String.format("Unrecognize type %s in %s", type,
-						_msgName));
+
+			// if (qType != null)
+			element.setType(qType);
+			// else
+			// LOGGER.warning(String.format("Unrecognize type %s in %s", type,
+			// _msgName));
 
 			generateRefElement(rowObject, element);
 
 		} else { // Not LIST type
 
-			if (qType != null)
-				element.setType(qType);
-			else
-				LOGGER.warning(String.format("Unrecognize type %s in %s", type,
-						_msgName));
+			// if (qType != null)
+			element.setType(qType);
+			// else
+			// LOGGER.warning(String.format("Unrecognize type %s in %s", type,
+			// _msgName));
 
 			generateSimpleElement(rowObject, element);
 		}

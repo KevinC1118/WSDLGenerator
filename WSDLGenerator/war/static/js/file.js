@@ -61,13 +61,17 @@ var upload = function(files) {
 			var dialog = new Dialog(), resptxt = xmlhttp.responseText
 					.split(',');
 
-			dialog.uuid = resptxt[1];
+			if (resptxt[0] == 'err')
+				console.log(resptxt[1]);
+			else {
+				dialog.uuid = resptxt[1];
 
-			document.body.removeChild(document.getElementById('loaderImage'));
+				document.body.removeChild(document
+						.getElementById('loaderImage'));
 
-			dialog.show();
+				dialog.show();
+			}
 		}
-		// showDialog(xmlhttp.responseText.split(','));
 	}, false);
 
 	xmlhttp.sendAsBinary(build(boundary, files, inputs));

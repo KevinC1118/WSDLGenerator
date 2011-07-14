@@ -131,23 +131,30 @@ public class UploadServlet extends HttpServlet {
 					.getGeneratedFiles());
 
 			// generate schema file
-			generatedFiles.addAll(new SchemaGenerator(excelFiles, prop)
-					.getGeneratedFiles());
+			try {
+				generatedFiles.addAll(new SchemaGenerator(excelFiles, prop)
+						.getGeneratedFiles());
 
-			CommonUtil.getCache().put(req.getSession().getId(),
-					new CommonUtil().toZip(generatedFiles));
+				CommonUtil.getCache().put(req.getSession().getId(),
+						new CommonUtil().toZip(generatedFiles));
 
-			long end = quotaService.getCpuTimeInMegaCycles();
+				long end = quotaService.getCpuTimeInMegaCycles();
 
-			// return spending time and session id
-			resp.getWriter().write(
-					Double.toString(quotaService
-							.convertMegacyclesToCpuSeconds(end - start))
-							+ ","
-							+ req.getSession().getId());
+				// return spending time and session id
+				resp.getWriter().write(
+						Double.toString(quotaService
+								.convertMegacyclesToCpuSeconds(end - start))
+								+ "," + req.getSession().getId());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+//				resp.getWriter().write(e.getMessage());
+				throw e;
+			}
 
 		} catch (FileUploadException e) {
 			LOGGER.warning(e.toString());
+		} catch (InterruptedException e) {
+			resp.getWriter().write(e.getMessage());
 		}
 	}
 
