@@ -1,4 +1,4 @@
-if (!(typeof XMLHttpRequest.prototype.sendAsBinary == "function")) {
+if (!XMLHttpRequest.prototype.sendAsBinary) {
 
 	// http://javascript0.org/wiki/Portable_sendAsBinary
 	XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
@@ -15,7 +15,7 @@ var upload = function(files) {
 
 	hideTipword();
 
-	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = '---------------fdsfwefFDSF', inputs = document
+	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = '---------fdsfwefFDSF', inputs = document
 			.querySelectorAll('#settingPanels>div:FIRST-CHILD input'), dashdash = '--', crlf = '\r\n', builder = '';
 
 	xmlhttp.open('POST', url, true);
