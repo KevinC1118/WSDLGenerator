@@ -89,6 +89,10 @@ public class UploadServlet extends HttpServlet {
 						if (fieldName.equals("addressLocation")) {
 							prop.setProperty("excel2wsdl.soapaddress.location",
 									value);
+						} else if (fieldName.equals("targetnamespace")) {
+							prop.setProperty(
+									"excel2wsdl.targetnamespace.urlprefix",
+									value);
 						}
 					}
 
@@ -147,7 +151,7 @@ public class UploadServlet extends HttpServlet {
 								+ "," + req.getSession().getId());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-//				resp.getWriter().write(e.getMessage());
+				// resp.getWriter().write(e.getMessage());
 				throw e;
 			}
 

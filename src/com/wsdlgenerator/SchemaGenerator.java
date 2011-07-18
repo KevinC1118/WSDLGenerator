@@ -136,7 +136,7 @@ public class SchemaGenerator extends AbstractGenerator {
 
 		Schema schema = schemaDocument.addNewSchema();
 		schema.setTargetNamespace(new StringBuffer(getProperty().getProperty(
-				"excel2wsdl.lancer.namespace.url")).append(msgName).toString());
+				"excel2wsdl.targetnamespace.urlprefix")).append(msgName).toString());
 
 		XmlCursor xmlCursor = schemaDocument.newCursor();
 
