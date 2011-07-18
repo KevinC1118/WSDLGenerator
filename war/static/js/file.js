@@ -1,53 +1,22 @@
-function build(boundary, files, fields) {
+if (!(typeof XMLHttpRequest.prototype.sendAsBinary == "function")) {
 
-	var dashdash = '--', crlf = '\r\n', builder = '';
-
-	// builder += 'content-disposition: form-data';
-	// builder += crlf;
-	// builder += 'Content-Type: multipart/form-data; boundary=' + boundary;
-	// builder += crlf;
-
-	if (fields) {
-
-		for ( var i = 0, max = fields.length; i < max; i++) {
-			builder += dashdash + boundary + crlf;
-			builder += 'content-disposition: form-data; name="'
-					+ fields[i].name + '"' + crlf + crlf;
-			builder += fields[i].value + crlf;
+	// http://javascript0.org/wiki/Portable_sendAsBinary
+	XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
+		function byteValue(x) {
+			return x.charCodeAt(0) & 0xff;
 		}
-	}
-
-	var len = files.length;
-	for ( var i = 0; i < len; i++) {
-
-		builder += dashdash + boundary + crlf;
-
-		var file = files[i];
-		/* Generate headers. */
-		builder += 'content-disposition: form-data; name="file"; ';
-		if (file.fileName) {
-			builder += 'filename="' + file.fileName + '"';
-		}
-		builder += crlf;
-
-		builder += 'Content-Type: application/octet-stream' + crlf + crlf;
-
-		/* Append binary data. */
-		builder += file.getAsBinary() + crlf;
-	}
-
-	/* Mark end of the request. */
-	builder += dashdash + boundary + dashdash + crlf;
-
-	return builder;
+		var ords = Array.prototype.map.call(datastr, byteValue);
+		var ui8a = new Uint8Array(ords);
+		this.send(ui8a.buffer);
+	};
 }
 
 var upload = function(files) {
 
 	hideTipword();
 
-	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = 'fdsfwefFDSF', inputs = document
-			.querySelectorAll('#settingPanels>div:FIRST-CHILD input');
+	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = '---------------fdsfwefFDSF', inputs = document
+			.querySelectorAll('#settingPanels>div:FIRST-CHILD input'), dashdash = '--', crlf = '\r\n', builder = '';
 
 	xmlhttp.open('POST', url, true);
 	xmlhttp.setRequestHeader('Content-type', 'multipart/form-data; boundary='
@@ -74,5 +43,41 @@ var upload = function(files) {
 		}
 	}, false);
 
-	xmlhttp.sendAsBinary(build(boundary, files, inputs));
+	if (inputs) {
+
+		for ( var i = 0, input; input = inputs[i]; i++) {
+			builder += dashdash + boundary + crlf;
+			builder += 'content-disposition: form-data; name="' + input.name
+					+ '"' + crlf + crlf;
+			builder += input.value + crlf;
+		}
+	}
+
+	for ( var i = 0, f; f = files[i]; i++) {
+
+		var fr = new FileReader();
+		fr.readAsBinaryString(f);
+		fr.onload = (function(file, index, length) {
+			return function(evt) {
+
+				builder += /* boundary */dashdash
+						+ boundary /* boundary end */
+						+ crlf
+						+ /* headers */'content-disposition: form-data; name="file"; filename="'
+						+ file.name + '"' + crlf
+						+ 'Content-Type: application/octet-stream'/* headers end */ + crlf
+						+ crlf + /* data */evt.target.result
+						+ crlf;
+
+				if (index == length - 1) {
+
+					/* Mark end of the request */
+					builder += dashdash + boundary + dashdash + crlf;
+
+					// send
+					xmlhttp.sendAsBinary(builder);
+				}
+			};
+		})(f,i,files.length);
+	}
 };
