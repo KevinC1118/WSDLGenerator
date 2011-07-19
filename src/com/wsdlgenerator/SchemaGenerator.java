@@ -30,7 +30,7 @@ import com.wsdlgenerator.model.RowObject;
 import com.wsdlgenerator.util.CommonUtil;
 
 /**
- * @author Kevin.C
+ * @author KevinC
  * 
  */
 public class SchemaGenerator extends AbstractGenerator {
@@ -49,14 +49,15 @@ public class SchemaGenerator extends AbstractGenerator {
 
 	/**
 	 * @param dataSource
-	 * @throws InterruptedException 
+	 * @throws UnknownTypeException
 	 */
-	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop) throws InterruptedException {
+	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop)
+			throws UnknownTypeException {
 		super(excelFiles, prop);
 		execute();
 	}
 
-	private void execute() throws InterruptedException {
+	private void execute() throws UnknownTypeException {
 
 		for (Iterator<ExcelFile> ite = super.getExcelFiles().iterator(); ite
 				.hasNext();) {
@@ -81,16 +82,16 @@ public class SchemaGenerator extends AbstractGenerator {
 				// msgName));
 				tmp = new StringBuffer(ef.getName()).append(".")
 						.append(_msgName).toString();
-				try {
-					if (requestMsgGenerate(tmp) & responseMsgGenerate(tmp))
-						save(new StringBuffer(ef.getName()).append("_")
-								.append(_msgName).toString());
-					else
-						LOGGER.warning(String.format("%s generate failure!!!",
-								_msgName));
-				} catch (InterruptedException e) {
-					throw new InterruptedException("err," + e.getMessage() + " in " + ef.getName());
-				}
+
+				if (requestMsgGenerate(tmp) & responseMsgGenerate(tmp))
+					save(new StringBuffer(ef.getName()).append("_")
+							.append(_msgName).toString());
+				else
+					LOGGER.warning(String.format("%s generate failure!!!",
+							_msgName));
+				// throw new InterruptedException("error," + e.getMessage()
+				// + " in " + ef.getName() + " sheet.");
+
 			}
 		}
 	}
@@ -136,7 +137,8 @@ public class SchemaGenerator extends AbstractGenerator {
 
 		Schema schema = schemaDocument.addNewSchema();
 		schema.setTargetNamespace(new StringBuffer(getProperty().getProperty(
-				"excel2wsdl.targetnamespace.urlprefix")).append(msgName).toString());
+				"excel2wsdl.targetnamespace.urlprefix")).append(msgName)
+				.toString());
 
 		XmlCursor xmlCursor = schemaDocument.newCursor();
 
@@ -151,8 +153,10 @@ public class SchemaGenerator extends AbstractGenerator {
 	 * 產生request message schema
 	 * 
 	 * @return boolean 是否成功產生request message schema
+	 * @throws UnknownTypeException
 	 */
-	private boolean requestMsgGenerate(String msgName) {
+	private boolean requestMsgGenerate(String msgName)
+			throws UnknownTypeException {
 		if (schemaDocument == null)
 			return false;
 		if (schemaDocument.getSchema() == null)
@@ -163,18 +167,15 @@ public class SchemaGenerator extends AbstractGenerator {
 
 		Schema schema = schemaDocument.getSchema();
 
-		try {
-			addTopLevelElement(schema, msgName, (ArrayList<?>) ef
-					.getRequestMsg().get(msgName), null);
+		addTopLevelElement(schema, msgName, (ArrayList<?>) ef.getRequestMsg()
+				.get(msgName), null);
 
-			return true;
-		} catch (Exception e) {
-			LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
-			return false;
-		}
+		return true;
+
 	}
 
-	private boolean responseMsgGenerate(String msgName) throws InterruptedException {
+	private boolean responseMsgGenerate(String msgName)
+			throws UnknownTypeException {
 		if (schemaDocument == null)
 			return false;
 		if (schemaDocument.getSchema() == null)
@@ -190,7 +191,7 @@ public class SchemaGenerator extends AbstractGenerator {
 				.getResponseMsg().get(responseMsgName), null);
 		return true;
 
-//		LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
+		// LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
 	}
 
 	/**
@@ -203,11 +204,12 @@ public class SchemaGenerator extends AbstractGenerator {
 	 * @param elementList
 	 *            Element list
 	 * @throws InterruptedException
+	 * @throws UnknownTypeException
 	 * 
 	 */
 	private void addTopLevelElement(Schema schema, String elementName,
 			ArrayList<?> elementList, RowObject parentRowObject)
-			throws InterruptedException {
+			throws UnknownTypeException {
 
 		// 作為遞迴時傳給自己的array list
 		ArrayList<?> elList;
@@ -333,22 +335,27 @@ public class SchemaGenerator extends AbstractGenerator {
 	 * 
 	 * @param element
 	 * @param rowObject
+	 * @throws UnknownTypeException
 	 * @throws InterruptedException
 	 */
 	private void addLocalElement(Element element, RowObject rowObject)
-			throws InterruptedException {
+			throws UnknownTypeException {
 
 		element.setName(rowObject.getKey().trim());
 
 		String type = rowObject.getType().trim();
 		QName qType = new QName("");
+
 		try {
 			qType = util.getSchemaSimpleType(type);
-
-		} catch (InterruptedException e) {
-			throw new InterruptedException(String.format(
-					"Unrecognize type %s in %s", type, _msgName));
+		} catch (UnknownTypeException e) {
+			throw new UnknownTypeException(String.format("%s in %s",
+					new Object[] { e.getMessage(), _msgName }));
 		}
+
+		// throw new InterruptedException(String.format(
+		// "Unrecognize type %s in %s", type, _msgName));
+
 		/*
 		 * 判斷是否為LIST型態 是, maxOccurs="unbounded" 否, maxOccurs="1" - default
 		 */

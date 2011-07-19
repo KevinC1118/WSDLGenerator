@@ -27,19 +27,14 @@ var upload = function(files) {
 	xmlhttp.addEventListener('readystatechange', function(ev) {
 		if (xmlhttp.readyState == 4 & xmlhttp.status == 200) {
 
-			var dialog = new Dialog(), resptxt = xmlhttp.responseText
-					.split(',');
+			var dialog = new DownloadDialog(), resptxt = JSON
+					.parse(xmlhttp.responseText);
 
-			if (resptxt[0] == 'err')
-				console.log(resptxt[1]);
-			else {
-				dialog.uuid = resptxt[1];
+			dialog.uuid = resptxt.ID;
 
-				document.body.removeChild(document
-						.getElementById('loaderImage'));
+			document.body.removeChild(document.getElementById('loaderImage'));
 
-				dialog.show();
-			}
+			dialog.show();
 		}
 	}, false);
 
@@ -65,9 +60,8 @@ var upload = function(files) {
 						+ crlf
 						+ /* headers */'content-disposition: form-data; name="file"; filename="'
 						+ file.name + '"' + crlf
-						+ 'Content-Type: application/octet-stream'/* headers end */ + crlf
-						+ crlf + /* data */evt.target.result
-						+ crlf;
+						+ 'Content-Type: application/octet-stream'/* headers end */
+						+ crlf + crlf + /* data */evt.target.result + crlf;
 
 				if (index == length - 1) {
 
@@ -78,6 +72,6 @@ var upload = function(files) {
 					xmlhttp.sendAsBinary(builder);
 				}
 			};
-		})(f,i,files.length);
+		})(f, i, files.length);
 	}
 };

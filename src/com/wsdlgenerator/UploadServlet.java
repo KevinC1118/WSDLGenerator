@@ -24,6 +24,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.quota.QuotaService;
 import com.google.appengine.api.quota.QuotaServiceFactory;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.wsdlgenerator.model.ExcelFile;
 import com.wsdlgenerator.model.GeneratedFile;
 import com.wsdlgenerator.util.CommonUtil;
@@ -50,6 +54,8 @@ public class UploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		Properties prop = MyProperties.getProperties();
+		JsonObject jsonObject = new JsonObject();
+		JsonArray jsonArray = new JsonArray(); // ERROR message
 
 		QuotaService quotaService = QuotaServiceFactory.getQuotaService();
 		long start = quotaService.getCpuTimeInMegaCycles();
@@ -135,31 +141,31 @@ public class UploadServlet extends HttpServlet {
 					.getGeneratedFiles());
 
 			// generate schema file
+
 			try {
 				generatedFiles.addAll(new SchemaGenerator(excelFiles, prop)
 						.getGeneratedFiles());
-
-				CommonUtil.getCache().put(req.getSession().getId(),
-						new CommonUtil().toZip(generatedFiles));
-
-				long end = quotaService.getCpuTimeInMegaCycles();
-
-				// return spending time and session id
-				resp.getWriter().write(
-						Double.toString(quotaService
-								.convertMegacyclesToCpuSeconds(end - start))
-								+ "," + req.getSession().getId());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				// resp.getWriter().write(e.getMessage());
-				throw e;
+			} catch (UnknownTypeException e) {
+				jsonArray.add(new JsonPrimitive(e.getMessage()));
 			}
+
+			CommonUtil.getCache().put(req.getSession().getId(),
+					new CommonUtil().toZip(generatedFiles));
 
 		} catch (FileUploadException e) {
 			LOGGER.warning(e.toString());
-		} catch (InterruptedException e) {
-			resp.getWriter().write(e.getMessage());
 		}
+		long end = quotaService.getCpuTimeInMegaCycles();
+
+		jsonArray.add(new JsonPrimitive("TESTTESTTEST"));
+		jsonObject.addProperty(
+				"TIME"/* spending time */,
+				Double.toString(quotaService.convertMegacyclesToCpuSeconds(end
+						- start)));
+		jsonObject.addProperty("ID", req.getSession().getId());
+		jsonObject.add("ERROR", jsonArray);
+
+		resp.getWriter().append(new Gson().toJson(jsonObject));
 	}
 
 }

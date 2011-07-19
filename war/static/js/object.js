@@ -1,8 +1,8 @@
 /**
- * Author: Kevin.C
+ * Author: KevinC
  */
 
-function Dialog() {
+function DownloadDialog() {
 
 	this.uuid = null;
 
@@ -46,11 +46,30 @@ function Dialog() {
 		window.location.href = '/';
 	}, false);
 
-	this.show = function() {
+	DownloadDialog.prototype.show = function() {
 
 		link.href = '/Download?' + this.uuid;
 		document.body.appendChild(dialog);
-		timeout(600000);
+		var time = 600000;
+
+		changeTimeoutspan();
+		var t = setInterval(function() {
+			changeTimeoutspan();
+		}, 1000);
+
+		function changeTimeoutspan() {
+			timeoutspan.innerHTML = Math.floor(time / 60000) + ' : '
+					+ (function() {
+						var t = (time % 60000 / 1000).toString();
+						return (t.length == 1) ? '0' + t : t;
+					})();
+			time -= 1000;
+			(time < 0) ? (function() {
+				clearTimeout(t);
+				timeoutspan.innerHTML = 'Sorry, It\'s timeout';
+			})() : null;
+		}
+
 	};
 }
 
@@ -102,16 +121,3 @@ var UploadButton = function() {
 
 	return img;
 };
-
-function timeout(time) {
-
-	var obj = document.querySelector('.dialog .timeout');
-
-	obj.innerHTML = Math.floor(time / 60000) + ' : ' + (function() {
-		var t = (time % 60000 / 1000).toString();
-		return (t.length == 1) ? '0' + t : t;
-	})();
-
-	(parseInt(time) > 0) ? setTimeout('timeout(' + parseInt(time - 1000) + ')',
-			1000) : obj.innerHTML = 'Sorry, It\'s timeout';
-}

@@ -21,6 +21,7 @@ import javax.xml.namespace.QName;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
+import com.wsdlgenerator.UnknownTypeException;
 import com.wsdlgenerator.model.GeneratedFile;
 
 /**
@@ -87,7 +88,7 @@ public class CommonUtil {
 		return null;
 	}
 
-	public QName getSchemaSimpleType(String arg0) throws InterruptedException {
+	public QName getSchemaSimpleType(String arg0) throws UnknownTypeException {
 
 		String namespace = prop.getProperty("excel2wsdl.namespace.xsd");
 
@@ -100,7 +101,7 @@ public class CommonUtil {
 		else if (Pattern.matches("^DECIMAL$", tmp)) // DECIMAL
 			return new QName(namespace, "decimal");
 		else {
-			throw new InterruptedException();
+			throw new UnknownTypeException(String.format("Unknow type \"%s\"", arg0));
 		}
 	}
 }
