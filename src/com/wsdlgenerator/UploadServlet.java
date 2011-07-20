@@ -144,6 +144,7 @@ public class UploadServlet extends HttpServlet {
 			AbstractGenerator generator = new SchemaGenerator(excelFiles, prop);
 			generatedFiles.addAll(generator.getGeneratedFiles());
 			List<String> error = generator.getERRORMSG();
+			// Get error messages
 			for (int i = 0, max = error.size(); i < max; i++)
 				jsonArray.add(new JsonPrimitive(error.get(i)));
 

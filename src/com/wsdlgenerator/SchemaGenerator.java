@@ -84,12 +84,14 @@ public class SchemaGenerator extends AbstractGenerator {
 				if (requestMsgGenerate(tmp) & responseMsgGenerate(tmp))
 					save(new StringBuffer(ef.getName()).append("_")
 							.append(_msgName).toString());
-				else
-					LOGGER.warning(String.format("%s generate failure!!!",
-							_msgName));
-				// throw new InterruptedException("error," + e.getMessage()
-				// + " in " + ef.getName() + " sheet.");
-
+				else {
+					String msg = String
+							.format("For some reasons, %s generation failed. Please check %s service in %s.",
+									new Object[] { _msgName, _msgName,
+											ef.getName() });
+					LOGGER.warning(msg);
+					getERRORMSG().add(msg);
+				}
 			}
 		}
 	}
@@ -348,8 +350,10 @@ public class SchemaGenerator extends AbstractGenerator {
 			qType = util.getSchemaSimpleType(type);
 		} catch (UnknownTypeException e) {
 			getERRORMSG().add(
-					String.format("%s in %s of %s",
-							new Object[] { e.getMessage(), _msgName, ef }));
+					String.format(
+							"%s in %s service in %s",
+							new Object[] { e.getMessage(), _msgName,
+									ef.getName() }));
 		}
 
 		// throw new InterruptedException(String.format(

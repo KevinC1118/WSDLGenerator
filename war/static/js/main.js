@@ -1,3 +1,32 @@
+if (!Array.prototype.forEach) {
+
+	Array.prototype.forEach = function(callbackfn, thisArg) {
+
+		var T, O = Object(this), len = O.length >>> 0, k = 0;
+
+		if (!callbackfn || !callbackfn.call) {
+			throw new TypeError();
+		}
+
+		if (thisArg) {
+			T = thisArg;
+		}
+
+		while (k < len) {
+
+			var Pk = String(k), kPresent = O.hasOwnProperty(Pk), kValue;
+
+			if (kPresent) {
+				kValue = O[Pk];
+
+				callbackfn.call(T, kValue, k, O);
+			}
+
+			k++;
+		}
+	};
+}
+
 function loadstart(ev) {
 
 	var mask = document.createElement('div'), div = document
@@ -72,12 +101,11 @@ var createFileObj = function(evt) {
 		document.body.appendChild(new UploadButton());
 };
 
-var showPanels = function(evt) {
-
-	evt.preventDefault();
-	evt.stopPropagation();
-
+var showPanels = function() {
+	
 	var tagList = document.querySelector('#tagList');
+	if(tagList.style.right) return;
+	
 	var panel = document.querySelector('#settingPanels');
 
 	tagList.style.right = '300px';
@@ -144,7 +172,7 @@ function hideTooltip(evt) {
 	p.removeChild(img);
 }
 
-window.onload = (function() {
+window.onload = function() {
 
 	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
 			.getElementById('file');
@@ -160,12 +188,14 @@ window.onload = (function() {
 	fileInput.addEventListener('change', createFileObj, false);
 
 	var tags = document.querySelectorAll('#tagList>li');
-	for ( var i = 0, max = tags.length; i < max; i++) {
-		tags[i].addEventListener('mouseover', showPanels, false);
-		tags[i].addEventListener('click', (function() {
-			tags[i].index = i;
-			return showPanel;
-		})(), false);
+	for ( var i = 0, tag; (tag = tags[i]); i++) {
+		tag.addEventListener('click', (function(index) {
+			return function(evt) {
+				showPanels();
+				evt.target.index = index;
+				showPanel.call(evt.target);
+			};
+		})(i), false);
 	}
 
 	document.getElementsByName('addressLocation')[0].onblur = function(evt) {
@@ -179,14 +209,13 @@ window.onload = (function() {
 		}
 	};
 
-	document.getElementsByName('snPosition')[0].onmouseover = showTooltip;
-	document.getElementsByName('snPosition')[0].onmouseout = hideTooltip;
-	document.getElementsByName('levelIndex')[0].onmouseover = showTooltip;
-	document.getElementsByName('levelIndex')[0].onmouseout = hideTooltip;
-	document.getElementsByName('keyIndex')[0].onmouseover = showTooltip;
-	document.getElementsByName('keyIndex')[0].onmouseout = hideTooltip;
-	document.getElementsByName('typeIndex')[0].onmouseover = showTooltip;
-	document.getElementsByName('typeIndex')[0].onmouseout = hideTooltip;
-	document.getElementById('save').onmouseover = showTooltip;
-	document.getElementById('save').onmouseout = hideTooltip;
-});
+	[ document.getElementsByName('snPosition')[0],
+			document.getElementsByName('levelIndex')[0],
+			document.getElementsByName('keyIndex')[0],
+			document.getElementsByName('typeIndex')[0],
+			document.getElementById('save') ].forEach(function(element, index,
+			array) {
+		element.onmouseover = showTooltip;
+		element.onmouseout = hideTooltip;
+	});
+};
