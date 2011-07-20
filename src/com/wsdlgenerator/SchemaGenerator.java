@@ -49,15 +49,13 @@ public class SchemaGenerator extends AbstractGenerator {
 
 	/**
 	 * @param dataSource
-	 * @throws UnknownTypeException
 	 */
-	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop)
-			throws UnknownTypeException {
+	public SchemaGenerator(List<ExcelFile> excelFiles, Properties prop) {
 		super(excelFiles, prop);
 		execute();
 	}
 
-	private void execute() throws UnknownTypeException {
+	private void execute() {
 
 		for (Iterator<ExcelFile> ite = super.getExcelFiles().iterator(); ite
 				.hasNext();) {
@@ -153,10 +151,8 @@ public class SchemaGenerator extends AbstractGenerator {
 	 * 產生request message schema
 	 * 
 	 * @return boolean 是否成功產生request message schema
-	 * @throws UnknownTypeException
 	 */
-	private boolean requestMsgGenerate(String msgName)
-			throws UnknownTypeException {
+	private boolean requestMsgGenerate(String msgName) {
 		if (schemaDocument == null)
 			return false;
 		if (schemaDocument.getSchema() == null)
@@ -167,15 +163,18 @@ public class SchemaGenerator extends AbstractGenerator {
 
 		Schema schema = schemaDocument.getSchema();
 
-		addTopLevelElement(schema, msgName, (ArrayList<?>) ef.getRequestMsg()
-				.get(msgName), null);
-
+		try {
+			addTopLevelElement(schema, msgName, (ArrayList<?>) ef
+					.getRequestMsg().get(msgName), null);
+		} catch (Exception e) {
+			LOGGER.warning(e.toString());
+			return false;
+		}
 		return true;
 
 	}
 
-	private boolean responseMsgGenerate(String msgName)
-			throws UnknownTypeException {
+	private boolean responseMsgGenerate(String msgName) {
 		if (schemaDocument == null)
 			return false;
 		if (schemaDocument.getSchema() == null)
@@ -187,8 +186,13 @@ public class SchemaGenerator extends AbstractGenerator {
 		Schema schema = schemaDocument.getSchema();
 		String responseMsgName = new StringBuffer(msgName).append("Response")
 				.toString();
-		addTopLevelElement(schema, responseMsgName, (ArrayList<?>) ef
-				.getResponseMsg().get(responseMsgName), null);
+		try {
+			addTopLevelElement(schema, responseMsgName, (ArrayList<?>) ef
+					.getResponseMsg().get(responseMsgName), null);
+		} catch (Exception e) {
+			LOGGER.warning(e.toString());
+			return false;
+		}
 		return true;
 
 		// LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
@@ -203,13 +207,10 @@ public class SchemaGenerator extends AbstractGenerator {
 	 *            Element's name
 	 * @param elementList
 	 *            Element list
-	 * @throws InterruptedException
-	 * @throws UnknownTypeException
 	 * 
 	 */
 	private void addTopLevelElement(Schema schema, String elementName,
-			ArrayList<?> elementList, RowObject parentRowObject)
-			throws UnknownTypeException {
+			ArrayList<?> elementList, RowObject parentRowObject) {
 
 		// 作為遞迴時傳給自己的array list
 		ArrayList<?> elList;
@@ -335,11 +336,8 @@ public class SchemaGenerator extends AbstractGenerator {
 	 * 
 	 * @param element
 	 * @param rowObject
-	 * @throws UnknownTypeException
-	 * @throws InterruptedException
 	 */
-	private void addLocalElement(Element element, RowObject rowObject)
-			throws UnknownTypeException {
+	private void addLocalElement(Element element, RowObject rowObject) {
 
 		element.setName(rowObject.getKey().trim());
 
@@ -349,8 +347,9 @@ public class SchemaGenerator extends AbstractGenerator {
 		try {
 			qType = util.getSchemaSimpleType(type);
 		} catch (UnknownTypeException e) {
-			throw new UnknownTypeException(String.format("%s in %s",
-					new Object[] { e.getMessage(), _msgName }));
+			getERRORMSG().add(
+					String.format("%s in %s of %s",
+							new Object[] { e.getMessage(), _msgName, ef }));
 		}
 
 		// throw new InterruptedException(String.format(

@@ -3,6 +3,7 @@
  */
 package com.wsdlgenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,6 +18,7 @@ public abstract class AbstractGenerator {
 
 	private List<ExcelFile> excelFiles;
 	private Properties prop;
+	private List<String> ERRORMSG = new ArrayList<String>();
 
 	// protected String destination;
 
@@ -35,20 +37,10 @@ public abstract class AbstractGenerator {
 	protected Properties getProperty() {
 		return this.prop;
 	}
-
-//	public AbstractGenerator getWSDLGenerator(List<ExcelFile> excelFiles,
-//			Properties prop) {
-//		AbstractGenerator generator = new WSDLGenerator(excelFiles);
-//		generator.setProperty(prop);
-//		return generator;
-//	}
-//
-//	public AbstractGenerator getSchemaGenerator(List<ExcelFile> excelFiles,
-//			Properties prop) {
-//		AbstractGenerator generator = new SchemaGenerator(excelFiles);
-//		generator.setProperty(prop);
-//		return generator;
-//	}
+	
+	public List<String> getERRORMSG() {
+		return ERRORMSG;
+	}
 
 	public abstract List<GeneratedFile> getGeneratedFiles();
 }

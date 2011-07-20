@@ -2,22 +2,51 @@
  * Author: KevinC
  */
 
-function DownloadDialog() {
+var Dialog = function() {
 
-	this.uuid = null;
+	var d,c;
+	this.content = null;
 
-	var dialog = document.createElement('div');
-
-	dialog.className = 'dialog';
+	this.dialog = document.createElement('div');
+	d = this.dialog;
+	
+	d.className = 'dialog';
 
 	/* dialog content element */
-	var c = document.createElement('div');
+	this.contentdiv = document.createElement('div');
+	c = this.contentdiv;
+	
 	c.className = 'content';
-	dialog.appendChild(c);
+	d.appendChild(c);
 	/* ++ */
 
+	/* close image button */
+	var closeImage = new Image();
+	closeImage.src = '/static/images/close.gif';
+	closeImage.style.position = 'absolute';
+	closeImage.style.top = '5px';
+	closeImage.style.right = '5px';
+	closeImage.style.cursor = 'pointer';
+	d.appendChild(closeImage);
+
+	closeImage.addEventListener('click', function() {
+		document.body.removeChild(d);
+		window.location.href = '/';
+	}, false);
+
+	Dialog.prototype.show = function() {
+
+		c.innerHTML = this.content;
+		document.body.appendChild(d);
+	};
+};
+
+function DownloadDialog() {
+	// Call the parent constructor
+	this.uuid = null;
+
 	var link = document.createElement('a');
-	c.appendChild(link);
+	this.contentdiv.appendChild(link);
 
 	var downloadImage = new Image();
 	downloadImage.src = '/static/images/Download.png';
@@ -28,28 +57,14 @@ function DownloadDialog() {
 	downloadspan.style.display = 'block';
 	link.appendChild(downloadspan);
 
-	/* close image button */
-	var closeImage = new Image();
-	closeImage.src = '/static/images/close.gif';
-	closeImage.style.position = 'absolute';
-	closeImage.style.top = '5px';
-	closeImage.style.right = '5px';
-	closeImage.style.cursor = 'pointer';
-	dialog.appendChild(closeImage);
-
 	var timeoutspan = document.createElement('span');
 	timeoutspan.className = 'timeout';
-	dialog.appendChild(timeoutspan);
-
-	closeImage.addEventListener('click', function() {
-		document.body.removeChild(dialog);
-		window.location.href = '/';
-	}, false);
+	this.dialog.appendChild(timeoutspan);
 
 	DownloadDialog.prototype.show = function() {
-
+		
 		link.href = '/Download?' + this.uuid;
-		document.body.appendChild(dialog);
+		document.body.appendChild(this.dialog);
 		var time = 600000;
 
 		changeTimeoutspan();
@@ -71,7 +86,12 @@ function DownloadDialog() {
 		}
 
 	};
-}
+
+};
+
+// inherit Dialog
+DownloadDialog.prototype = new Dialog();
+DownloadDialog.prototype.constructor = DownloadDialog;
 
 function FileObj(map) {
 

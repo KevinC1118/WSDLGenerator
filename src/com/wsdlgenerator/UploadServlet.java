@@ -141,13 +141,11 @@ public class UploadServlet extends HttpServlet {
 					.getGeneratedFiles());
 
 			// generate schema file
-
-			try {
-				generatedFiles.addAll(new SchemaGenerator(excelFiles, prop)
-						.getGeneratedFiles());
-			} catch (UnknownTypeException e) {
-				jsonArray.add(new JsonPrimitive(e.getMessage()));
-			}
+			AbstractGenerator generator = new SchemaGenerator(excelFiles, prop);
+			generatedFiles.addAll(generator.getGeneratedFiles());
+			List<String> error = generator.getERRORMSG();
+			for (int i = 0, max = error.size(); i < max; i++)
+				jsonArray.add(new JsonPrimitive(error.get(i)));
 
 			CommonUtil.getCache().put(req.getSession().getId(),
 					new CommonUtil().toZip(generatedFiles));
@@ -157,7 +155,6 @@ public class UploadServlet extends HttpServlet {
 		}
 		long end = quotaService.getCpuTimeInMegaCycles();
 
-		jsonArray.add(new JsonPrimitive("TESTTESTTEST"));
 		jsonObject.addProperty(
 				"TIME"/* spending time */,
 				Double.toString(quotaService.convertMegacyclesToCpuSeconds(end
@@ -167,5 +164,4 @@ public class UploadServlet extends HttpServlet {
 
 		resp.getWriter().append(new Gson().toJson(jsonObject));
 	}
-
 }
