@@ -123,7 +123,7 @@ public class ExcelParser {
 				if (cells[0] == null)
 					continue;
 				try {
-					if (!Pattern.compile("^[A-Z]+[A-Z]$")
+					if (!Pattern.compile("^[A-Z]+$")
 							.matcher(cells[COLUMN_KEY].getContents().trim())
 							.matches())
 						continue;

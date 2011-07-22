@@ -94,14 +94,37 @@ public class CommonUtil {
 
 		String tmp = arg0.trim();
 
-		if (Pattern.matches(".*STRING$", tmp)) // STRING & LIST OF STRING
+		if (Pattern
+				.compile(
+						String.format(
+								"((^%1$s$)|(list{1}.*%1$s{1}|%1$s{1}.*list{1}))",
+								"string"), Pattern.CASE_INSENSITIVE)
+				.matcher(tmp).matches())
 			return new QName(namespace, "string");
-		else if (Pattern.matches("^INTEGER$", tmp)) // INTEGER
+		else if (Pattern
+				.compile(
+						String.format(
+								"((^%1$s$)|(list{1}.*%1$s{1}|%1$s{1}.*list{1}))",
+								"integer"), Pattern.CASE_INSENSITIVE)
+				.matcher(tmp).matches()) // INTEGER
+			return new QName(namespace, "integer");
+		else if(Pattern
+				.compile(
+						String.format(
+								"((^%1$s$)|(list{1}.*%1$s{1}|%1$s{1}.*list{1}))",
+								"int"), Pattern.CASE_INSENSITIVE)
+				.matcher(tmp).matches())
 			return new QName(namespace, "int");
-		else if (Pattern.matches("^DECIMAL$", tmp)) // DECIMAL
+		else if (Pattern
+				.compile(
+						String.format(
+								"((^%1$s$)|(list{1}.*%1$s{1}|%1$s{1}.*list{1}))",
+								"decimal"), Pattern.CASE_INSENSITIVE)
+				.matcher(tmp).matches()) // DECIMAL
 			return new QName(namespace, "decimal");
 		else {
-			throw new UnknownTypeException(String.format("Unknow type \"%s\"", arg0));
+			throw new UnknownTypeException(String.format("Unknown type \"%s\"",
+					arg0));
 		}
 	}
 }

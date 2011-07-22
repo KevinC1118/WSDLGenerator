@@ -38,8 +38,6 @@ public class SchemaGenerator extends AbstractGenerator {
 	private List<GeneratedFile> schemaFiles = new ArrayList<GeneratedFile>();
 	private static final Logger LOGGER = Logger.getLogger(SchemaGenerator.class
 			.getName());
-	// private static final Properties getProperty() =
-	// MyProperties.getProperties();
 	private SchemaDocument schemaDocument;
 	private ParentStackDAO parentStackDAO;
 	private String _msgName;
@@ -75,9 +73,6 @@ public class SchemaGenerator extends AbstractGenerator {
 				namespaceGenerate(new StringBuffer(ef.getName()).append(".")
 						.append(_msgName).toString());
 
-				// LOGGER.info(String.format(
-				// "Start to generate %s's request and response Message",
-				// msgName));
 				tmp = new StringBuffer(ef.getName()).append(".")
 						.append(_msgName).toString();
 
@@ -97,11 +92,7 @@ public class SchemaGenerator extends AbstractGenerator {
 	}
 
 	private void save(String fileName) {
-		// _Logger.info(new
-		// StringBuffer("Generate ").append(msgName.replace(".",
-		// "_")).append(".xsd").toString());
-		// template file
-		// File schemaFile = CommonUtil.getNewTempFile();
+
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		try {
 			schemaDocument.save(stream);
@@ -116,11 +107,6 @@ public class SchemaGenerator extends AbstractGenerator {
 		} catch (IOException e) {
 			LOGGER.warning(e.toString());
 		}
-
-		// schemaDocument.save(new File(new
-		// StringBuffer(destination).append(msgName.replace(".",
-		// "_")).append(".xsd").toString()));
-
 	}
 
 	@Override
@@ -177,6 +163,7 @@ public class SchemaGenerator extends AbstractGenerator {
 	}
 
 	private boolean responseMsgGenerate(String msgName) {
+
 		if (schemaDocument == null)
 			return false;
 		if (schemaDocument.getSchema() == null)
@@ -196,8 +183,6 @@ public class SchemaGenerator extends AbstractGenerator {
 			return false;
 		}
 		return true;
-
-		// LOGGER.warning(String.format("%s : %s", msgName, e.toString()));
 	}
 
 	/**
@@ -344,43 +329,33 @@ public class SchemaGenerator extends AbstractGenerator {
 		element.setName(rowObject.getKey().trim());
 
 		String type = rowObject.getType().trim();
-		QName qType = new QName("");
+		QName qType;
 
 		try {
 			qType = util.getSchemaSimpleType(type);
 		} catch (UnknownTypeException e) {
+			
 			getERRORMSG().add(
 					String.format(
-							"%s in %s service in %s",
-							new Object[] { e.getMessage(), _msgName,
+							"%s < %s < %s < %s",
+							new Object[] { e.getMessage(), element.getName(), _msgName,
 									ef.getName() }));
+			
+			qType = new QName(getProperty().getProperty(
+					"excel2wsdl.namespace.xsd"), "");
 		}
-
-		// throw new InterruptedException(String.format(
-		// "Unrecognize type %s in %s", type, _msgName));
 
 		/*
 		 * 判斷是否為LIST型態 是, maxOccurs="unbounded" 否, maxOccurs="1" - default
 		 */
-		if (Pattern.matches("^LIST.*", type)) { // Is LIST
-												// type
+		if (Pattern.matches("^LIST.*", type)) { // LIST type
 
-			// if (qType != null)
 			element.setType(qType);
-			// else
-			// LOGGER.warning(String.format("Unrecognize type %s in %s", type,
-			// _msgName));
-
 			generateRefElement(rowObject, element);
 
 		} else { // Not LIST type
 
-			// if (qType != null)
 			element.setType(qType);
-			// else
-			// LOGGER.warning(String.format("Unrecognize type %s in %s", type,
-			// _msgName));
-
 			generateSimpleElement(rowObject, element);
 		}
 	}
@@ -395,10 +370,10 @@ public class SchemaGenerator extends AbstractGenerator {
 
 		if (Boolean.parseBoolean(getProperty().getProperty(
 				"excel2wsdl.hasNecessaryValue"))) {
-			if (rowObject.isNecessary()) { // 必傳
+			if (rowObject.isNecessary()) { // required
 				element.setMinOccurs(new BigInteger("1"));
 				element.setMaxOccurs(1);
-			} else { // 非必傳
+			} else { // non-required
 				element.setMinOccurs(new BigInteger("0"));
 				element.setMaxOccurs(1);
 			}
