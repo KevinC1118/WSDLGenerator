@@ -129,7 +129,7 @@ public class WSDLGenerator extends AbstractGenerator {
 					.append(".wsdl").toString());
 			wsdlFiles.add(generatedFile);
 
-			LOGGER.info(String.format("Generate %s", generatedFile.getName()));
+			/*LOGGER.info(String.format("Generate %s", generatedFile.getName()));*/
 
 		} catch (WSDLException e) {
 			LOGGER.warning(e.toString());

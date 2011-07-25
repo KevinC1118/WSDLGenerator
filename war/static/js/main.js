@@ -27,79 +27,18 @@ if (!Array.prototype.forEach) {
 	};
 }
 
-function loadstart(ev) {
+if (!XMLHttpRequest.prototype.sendAsBinary) {
 
-	var mask = document.createElement('div'), div = document
-			.createElement('div'), percent = document.createElement('div'), loaderImage = new Image();
-
-	mask.id = 'mask';
-	mask.className = 'mask';
-
-	loaderImage.src = '/static/images/ajax-loader.gif';
-	loaderImage.style.verticalAlign = 'middle';
-	loaderImage.style.display = 'inline-block';
-
-	div.id = 'loaderImage';
-
-	percent.id = 'percent';
-	percent.style.display = 'block';
-	percent.style.marginTop = '5px';
-	percent.style.fontSize = '0.9em';
-	percent.innerHTML = 'Loading...';
-
-	document.body.appendChild(mask);
-
-	div.appendChild(loaderImage);
-	div.appendChild(percent);
-	document.body.appendChild(div);
+	// http://javascript0.org/wiki/Portable_sendAsBinary
+	XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
+		function byteValue(x) {
+			return x.charCodeAt(0) & 0xff;
+		}
+		var ords = Array.prototype.map.call(datastr, byteValue);
+		var ui8a = new Uint8Array(ords);
+		this.send(ui8a.buffer);
+	};
 }
-
-function hideTipword() {
-	document.getElementById('tipword').style.visibility = 'hidden';
-}
-
-function cancel(e) {
-	if (e.preventDefault)
-		e.preventDefault(); // required by FF + Safari
-	e.dataTransfer.dropEffect = 'copy'; // tells the browser what drop effect is
-	// allowed here
-	return false; // required by IE
-}
-
-var createFileObj = function(evt) {
-
-	var files;
-
-	if (evt.type == 'change')
-		files = evt.currentTarget.files;
-	else /* if (evt.type == 'drop') */{
-		cancel(evt);
-		files = evt.dataTransfer.files;
-	}
-
-	var ol;
-
-	if (document.querySelector('#fileList'))
-		ol = document.querySelector('#fileList');
-	else {
-		ol = document.createElement('ol');
-		ol.id = 'fileList';
-		document.body.appendChild(ol);
-	}
-
-	for ( var i = 0, max = files.length; i < max; i++) {
-
-		var li = document.createElement("li"), fo = new FileObj({
-			file : files[i],
-		});
-
-		li.appendChild(fo);
-		ol.appendChild(li);
-	}
-
-	if (!document.querySelector('#uploadButton'))
-		document.body.appendChild(new UploadButton());
-};
 
 var showPanels = function() {
 	

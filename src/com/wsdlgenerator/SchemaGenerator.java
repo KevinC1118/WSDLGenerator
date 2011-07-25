@@ -102,7 +102,7 @@ public class SchemaGenerator extends AbstractGenerator {
 					.toString());
 			schemaFiles.add(generatedFile);
 
-			LOGGER.info(String.format("Generate %s", generatedFile.getName()));
+			/*LOGGER.info(String.format("Generate %s", generatedFile.getName()));*/
 
 		} catch (IOException e) {
 			LOGGER.warning(e.toString());

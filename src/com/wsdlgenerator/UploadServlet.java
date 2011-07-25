@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.memcache.MemcacheServiceException;
 import com.google.appengine.api.quota.QuotaService;
 import com.google.appengine.api.quota.QuotaServiceFactory;
 import com.google.gson.Gson;
@@ -148,9 +149,12 @@ public class UploadServlet extends HttpServlet {
 			for (int i = 0, max = error.size(); i < max; i++)
 				jsonArray.add(new JsonPrimitive(error.get(i)));
 
-			CommonUtil.getCache().put(req.getSession().getId(),
-					new CommonUtil().toZip(generatedFiles));
-
+			try {
+				CommonUtil.getCache().put(req.getSession().getId(),
+						new CommonUtil().toZip(generatedFiles));
+			} catch (MemcacheServiceException e) {
+				LOGGER.warning(e.toString());
+			}
 		} catch (FileUploadException e) {
 			LOGGER.warning(e.toString());
 		}

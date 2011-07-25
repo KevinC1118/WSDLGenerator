@@ -37,7 +37,7 @@ public class CommonUtil {
 	static {
 
 		Map<Object, Object> props = new HashMap<Object, Object>();
-		props.put(GCacheFactory.EXPIRATION_DELTA, 600);
+		props.put(GCacheFactory.EXPIRATION_DELTA, 300);
 
 		try {
 

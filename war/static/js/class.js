@@ -4,7 +4,6 @@
 
 var Dialog = function() {
 
-	var d,c;
 	this.content = null;
 
 	this.dialog = document.createElement('div');
@@ -43,6 +42,7 @@ var Dialog = function() {
 
 function DownloadDialog() {
 	// Call the parent constructor
+	
 	this.uuid = null;
 
 	var link = document.createElement('a');
@@ -65,7 +65,7 @@ function DownloadDialog() {
 		
 		link.href = '/Download?' + this.uuid;
 		document.body.appendChild(this.dialog);
-		var time = 600000;
+		var time = 300000;
 
 		changeTimeoutspan();
 		var t = setInterval(function() {
@@ -88,10 +88,40 @@ function DownloadDialog() {
 	};
 
 };
-
 // inherit Dialog
-DownloadDialog.prototype = new Dialog();
+DownloadDialog.prototype = new Dialog;
 DownloadDialog.prototype.constructor = DownloadDialog;
+
+function ErrorMsgDialog() {
+		
+	this.contentdiv.style.overflow = 'scroll';
+	this.contentdiv.style.fontSize = '0.7em';
+	this.contentdiv.style.height = 'auto';
+	this.contentdiv.style.margin = '30px 2px 2px 2px';
+	this.contentdiv.style.whiteSpace = 'nowrap';
+	
+	ErrorMsgDialog.prototype.show = function(){
+		
+		if(this.content instanceof Array) {
+			
+			this.dialog.className += ' errorMsgDialog';
+			
+			var ul = document.createElement('ul');
+			
+			this.content.forEach(function(e, i, l){
+				var li = document.createElement('li');
+				li.innerHTML = e;
+				ul.appendChild(li);
+			});
+			
+			this.contentdiv.appendChild(ul);
+			document.body.appendChild(this.dialog);
+		}
+		
+	};
+}
+ErrorMsgDialog.prototype = new Dialog;
+ErrorMsgDialog.prototype.constructor = ErrorMsgDialog;
 
 function FileObj(map) {
 

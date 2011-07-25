@@ -81,9 +81,6 @@ public class ExcelParser {
 	private Map<String, Collection<?>> getReqFromExcel(Sheet[] sheets,
 			String fileName) {
 
-		// LOGGER.info(String.format("Start to retrieve %s's request message.",
-		// fileName));
-
 		Map<String, Collection<?>> requestMsg = new HashMap<String, Collection<?>>();
 
 		// String msgName;
@@ -102,8 +99,8 @@ public class ExcelParser {
 				continue;
 			}
 
-			LOGGER.info(String.format("Parse %s sheet's request",
-					sheet.getName()));
+			/*LOGGER.info(String.format("Parse %s sheet's request",
+					sheet.getName()));*/
 
 			firstP = sheet.findCell(Pattern.compile("P"), 0, 0, 0,
 					sheet.getRowView(0).getSize(), false).getRow();
@@ -189,8 +186,8 @@ public class ExcelParser {
 				continue;
 			}
 
-			LOGGER.info(String.format("Parse %s sheet's response",
-					sheet.getName()));
+			/*LOGGER.info(String.format("Parse %s sheet's response",
+					sheet.getName()));*/
 
 			firstR = sheet.findCell(Pattern.compile("R"), 0, 0, 0,
 					sheet.getRowView(0).getSize(), false).getRow();
@@ -247,8 +244,8 @@ public class ExcelParser {
 
 		Set<String> sn = new HashSet<String>();
 
-		LOGGER.info(String.format("There are %s services in %s.",
-				sheets.length, fileName));
+		/*LOGGER.info(String.format("There are %s services in %s.",
+				sheets.length, fileName));*/
 
 		/*
 		 * Get service name in each sheet in workbook but except the first
