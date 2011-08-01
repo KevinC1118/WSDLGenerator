@@ -129,7 +129,10 @@ public class WSDLGenerator extends AbstractGenerator {
 					.append(".wsdl").toString());
 			wsdlFiles.add(generatedFile);
 
-			/*LOGGER.info(String.format("Generate %s", generatedFile.getName()));*/
+			/*
+			 * LOGGER.info(String.format("Generate %s",
+			 * generatedFile.getName()));
+			 */
 
 		} catch (WSDLException e) {
 			LOGGER.warning(e.toString());
@@ -157,10 +160,10 @@ public class WSDLGenerator extends AbstractGenerator {
 		definition.addNamespace("xsd",
 				getProperty().getProperty("excel2wsdl.namespace.xsd"));
 		definition.addNamespace("tns", definition.getTargetNamespace());
-		definition
-				.setQName(new QName(definition.getTargetNamespace(), fileName));
+		definition.setQName(new QName(definition.getTargetNamespace(), fileName
+				+ "_" + serviceName));
 
-		/* 
+		/*
 		 * Generate each service's namespace, it was equal to schame namespace.
 		 * example:
 		 * http://{lancer.namespace.url}/UC_DIS_SALESORDER.QRYSALESORDER
@@ -168,9 +171,9 @@ public class WSDLGenerator extends AbstractGenerator {
 		definition.addNamespace(
 				serviceName.trim().toLowerCase(),
 				new StringBuffer(getProperty().getProperty(
-						"excel2wsdl.targetnamespace.urlprefix")).append(fileName)
-						.append(".").append(serviceName.trim().toUpperCase())
-						.toString());
+						"excel2wsdl.targetnamespace.urlprefix"))
+						.append(fileName).append(".")
+						.append(serviceName.trim().toUpperCase()).toString());
 
 		return definition;
 	}
