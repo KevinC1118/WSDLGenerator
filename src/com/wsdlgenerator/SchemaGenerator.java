@@ -102,7 +102,10 @@ public class SchemaGenerator extends AbstractGenerator {
 					.toString());
 			schemaFiles.add(generatedFile);
 
-			/*LOGGER.info(String.format("Generate %s", generatedFile.getName()));*/
+			/*
+			 * LOGGER.info(String.format("Generate %s",
+			 * generatedFile.getName()));
+			 */
 
 		} catch (IOException e) {
 			LOGGER.warning(e.toString());
@@ -229,7 +232,8 @@ public class SchemaGenerator extends AbstractGenerator {
 		try {
 			currentLevel = ((RowObject) elementList.get(0)).getLevel();
 		} catch (IndexOutOfBoundsException e) {
-			LOGGER.warning(String.format("%s : %s", elementName, e.toString()));
+			getERRORMSG().add(
+					String.format("%s : %s", elementName, e.toString()));
 			currentLevel = 1;
 		}
 
@@ -334,13 +338,12 @@ public class SchemaGenerator extends AbstractGenerator {
 		try {
 			qType = util.getSchemaSimpleType(type);
 		} catch (UnknownTypeException e) {
-			
+
 			getERRORMSG().add(
-					String.format(
-							"%s < %s < %s < %s",
-							new Object[] { e.getMessage(), element.getName(), _msgName,
-									ef.getName() }));
-			
+					String.format("%s < %s < %s < %s",
+							new Object[] { e.getMessage(), element.getName(),
+									_msgName, ef.getName() }));
+
 			qType = new QName(getProperty().getProperty(
 					"excel2wsdl.namespace.xsd"), "");
 		}

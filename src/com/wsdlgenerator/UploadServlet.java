@@ -165,7 +165,7 @@ public class UploadServlet extends HttpServlet {
 				Double.toString(quotaService.convertMegacyclesToCpuSeconds(end
 						- start)));
 		jsonObject.addProperty("ID", req.getSession().getId());
-		jsonObject.add("ERROR", jsonArray);
+		jsonObject.add("ERROR", ((jsonArray.size() > 0) ? jsonArray : null));
 
 		resp.getWriter().append(new Gson().toJson(jsonObject));
 	}

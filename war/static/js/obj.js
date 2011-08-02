@@ -8,13 +8,13 @@ var Dialog = function() {
 
 	this.dialog = document.createElement('div');
 	d = this.dialog;
-	
+
 	d.className = 'dialog';
 
 	/* dialog content element */
 	this.contentdiv = document.createElement('div');
 	c = this.contentdiv;
-	
+
 	c.className = 'content';
 	d.appendChild(c);
 	/* ++ */
@@ -28,10 +28,11 @@ var Dialog = function() {
 	closeImage.style.cursor = 'pointer';
 	d.appendChild(closeImage);
 
-	closeImage.addEventListener('click', function() {
-		document.body.removeChild(d);
-		window.location.href = '/';
-	}, false);
+	closeImage.addEventListener('click', (function(n) {
+		return function() {
+			document.body.removeChild(n);
+		};
+	})(d), false);
 
 	Dialog.prototype.show = function() {
 
@@ -42,7 +43,7 @@ var Dialog = function() {
 
 function DownloadDialog() {
 	// Call the parent constructor
-	
+
 	this.uuid = null;
 
 	var link = document.createElement('a');
@@ -62,7 +63,7 @@ function DownloadDialog() {
 	this.dialog.appendChild(timeoutspan);
 
 	DownloadDialog.prototype.show = function() {
-		
+
 		link.href = '/Download?' + this.uuid;
 		document.body.appendChild(this.dialog);
 		var time = 300000;
@@ -93,31 +94,36 @@ DownloadDialog.prototype = new Dialog;
 DownloadDialog.prototype.constructor = DownloadDialog;
 
 function ErrorMsgDialog() {
-		
-	this.contentdiv.style.overflow = 'scroll';
-	this.contentdiv.style.fontSize = '0.7em';
-	this.contentdiv.style.height = 'auto';
+
 	this.contentdiv.style.margin = '30px 2px 2px 2px';
-	this.contentdiv.style.whiteSpace = 'nowrap';
+
+	var ta = document.createElement('textarea');
+	ta.setAttribute('readonly', 'readonly');
+	ta.setAttribute('wrap', 'off');
+	ta.style.fontSize = '0.7em';
+	ta.style.minHeight = '165px';
+	ta.style.minWidth = '343px';
+	ta.style.maxHeight = '165px';
+	ta.style.maxWidth = '343px';
+	ta.style.overflow = 'auto';
+	ta.style.backgroundColor = 'white';
+	ta.style.border = 'none';
+	ta.style.lineHeight = '1.5em';
+	ta.style.resize = 'none';
 	
-	ErrorMsgDialog.prototype.show = function(){
-		
-		if(this.content instanceof Array) {
-			
+	this.contentdiv.appendChild(ta);
+	
+	ErrorMsgDialog.prototype.show = function() {
+
+		if (this.content instanceof Array) {
+
 			this.dialog.className += ' errorMsgDialog';
-			
-			var ul = document.createElement('ul');
-			
-			this.content.forEach(function(e, i, l){
-				var li = document.createElement('li');
-				li.innerHTML = e;
-				ul.appendChild(li);
-			});
-			
-			this.contentdiv.appendChild(ul);
+
+			this.content.forEach(function(e, i, l) {
+				this.value += e + '\n';
+			}, ta);
 			document.body.appendChild(this.dialog);
 		}
-		
 	};
 }
 ErrorMsgDialog.prototype = new Dialog;
