@@ -18,12 +18,12 @@ var upload = function(files) {
 					.parse(xmlhttp.responseText);
 
 			dialog.uuid = resptxt.ID;
-			
+
 			document.body.removeChild(document.getElementById('loaderImage'));
 
 			dialog.show();
-			
-			if(resptxt.ERROR) {
+
+			if (resptxt.ERROR) {
 				var errorDialog = new ErrorMsgDialog;
 				errorDialog.content = resptxt.ERROR;
 				errorDialog.show();
@@ -53,8 +53,8 @@ var upload = function(files) {
 						+ crlf
 						+ /* headers */'content-disposition: form-data; name="file"; filename="'
 						+ file.name + '"' + crlf
-						+ 'Content-Type: application/octet-stream'/*headers end*/
-						+ crlf + crlf + /* data */evt.target.result + crlf;
+						+ 'Content-Type: application/octet-stream' + crlf
+						+ crlf + /* data */evt.target.result + crlf;
 
 				if (index == length - 1) {
 

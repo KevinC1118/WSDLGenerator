@@ -110,9 +110,9 @@ function ErrorMsgDialog() {
 	ta.style.border = 'none';
 	ta.style.lineHeight = '1.5em';
 	ta.style.resize = 'none';
-	
+
 	this.contentdiv.appendChild(ta);
-	
+
 	ErrorMsgDialog.prototype.show = function() {
 
 		if (this.content instanceof Array) {
@@ -177,3 +177,50 @@ var UploadButton = function() {
 
 	return img;
 };
+
+var SettingStorage = {
+
+	_record : window.localStorage.getItem('_wsdlgenerator_') ? JSON
+			.parse(window.localStorage.getItem('_wsdlgenerator_')) : new Object,
+
+	$menu : document.getElementById('settingRecord'),
+	$addressLocation : document.getElementById('addressLocation'),
+	$targetnamespace : document.getElementById('targetnamespace'),
+	$snPosition : document.getElementById('snPosition'),
+	$levelIndex : document.getElementById('levelIndex'),
+	$keyIndex : document.getElementById('keyIndex'),
+	$typeIndex : document.getElementById('typeIndex'),
+
+	init : function() {
+
+		for(var v in this._record) {
+			this.menuAdd(v, this._record[v]);
+		}
+
+		this.$menu.addEventListener('change', function(evt) {
+			selection(this._record[evt.target.value]);
+		}, false);
+	},
+	
+	menuAdd : function(name, value) {
+		var option = document.createElement('option');
+		option.setAttribute('value', value);
+		option.innerHTML = name;
+		this.$menu.appendChild(option);
+	},
+
+	recordAdd : function(rec) {},
+	
+	recordDelete : function(rec) {},
+	
+	selection : function(rec) {
+
+		this.$addressLocation.value = rec.addressLocation;
+		this.$keyIndex.value = rec.keyIndex;
+		this.$levelIndex.value = rec.levelIndex;
+		this.$snPosition.value = rec.snPosition;
+		this.$targetnamespace.value = rec.targetnamespace;
+		this.$typeIndex.value = rec.typeIndex;
+	}
+};
+SettingStorage.init();

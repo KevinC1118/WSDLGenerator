@@ -112,7 +112,7 @@ function hideTooltip(evt) {
 }
 
 window.onload = function() {
-
+	
 	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
 			.getElementById('file');
 
