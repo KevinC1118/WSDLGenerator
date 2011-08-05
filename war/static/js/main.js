@@ -41,10 +41,11 @@ if (!XMLHttpRequest.prototype.sendAsBinary) {
 }
 
 var showPanels = function() {
-	
+
 	var tagList = document.querySelector('#tagList');
-	if(tagList.style.right) return;
-	
+	if (tagList.style.right)
+		return;
+
 	var panel = document.querySelector('#settingPanels');
 
 	tagList.style.right = '300px';
@@ -137,7 +138,7 @@ window.onload = function() {
 		})(i), false);
 	}
 
-	document.getElementsByName('addressLocation')[0].onblur = function(evt) {
+	document.getElementById('addressLocation').onblur = function(evt) {
 
 		var value = this.value;
 
@@ -148,10 +149,10 @@ window.onload = function() {
 		}
 	};
 
-	[ document.getElementsByName('snPosition')[0],
-			document.getElementsByName('levelIndex')[0],
-			document.getElementsByName('keyIndex')[0],
-			document.getElementsByName('typeIndex')[0],
+	[ document.getElementById('snPosition'),
+			document.getElementById('levelIndex'),
+			document.getElementById('keyIndex'),
+			document.getElementById('typeIndex'),
 			document.getElementById('save') ].forEach(function(element, index,
 			array) {
 		element.onmouseover = showTooltip;
