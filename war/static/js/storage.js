@@ -29,27 +29,7 @@ var SettingStorage = {
 	},
 
 	menuAdd : function(name, value) {
-		var option = new Option(name, value), div = document
-				.createElement('div'), img = new Image();
-
-		div
-				.setAttribute('style',
-						'line-height:0;display:inline-block;width:100%;padding:2px;text-align:right;');
-
-		img.src = 'static/images/delete.gif';
-		img.setAttribute('style', 'position:relative;right:5px;');
-
-//		img.addEventListener('click', function(evt){
-//			console.log(evt);
-//		}, false);
-		
-		option.addEventListener('click', function(evt) {
-			evt.preventDefault();
-			console.log(evt);
-		}, false);
-
-		option.appendChild(div).appendChild(img);
-		SettingStorage.$menu.add(option, null);
+		SettingStorage.$menu.add(new Option(name, value), null);
 	},
 
 	recordAdd : function(name, value) {
@@ -66,15 +46,13 @@ var SettingStorage = {
 		var rec = SettingStorage._record[name];
 
 		SettingStorage.$addressLocation.value = rec.addressLocation ? rec.addressLocation
-				: null;
-		SettingStorage.$keyIndex.value = rec.keyIndex ? rec.keyIndex : null;
-		SettingStorage.$levelIndex.value = rec.levelIndex ? rec.levelIndex
-				: null;
-		SettingStorage.$snPosition.value = rec.snPosition ? rec.snPosition
-				: null;
+				: '';
+		SettingStorage.$keyIndex.value = rec.keyIndex ? rec.keyIndex : '';
+		SettingStorage.$levelIndex.value = rec.levelIndex ? rec.levelIndex : '';
+		SettingStorage.$snPosition.value = rec.snPosition ? rec.snPosition : '';
 		SettingStorage.$targetnamespace.value = rec.targetnamespace ? rec.targetnamespace
-				: null;
-		SettingStorage.$typeIndex.value = rec.typeIndex ? rec.typeIndex : null;
+				: '';
+		SettingStorage.$typeIndex.value = rec.typeIndex ? rec.typeIndex : '';
 	}
 };
 SettingStorage.init();
