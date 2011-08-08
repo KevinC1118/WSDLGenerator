@@ -113,7 +113,7 @@ function hideTooltip(evt) {
 }
 
 window.onload = function() {
-	
+
 	var buttomLayer = document.getElementById('buttomLayer'), fileInput = document
 			.getElementById('file');
 
@@ -152,9 +152,8 @@ window.onload = function() {
 	[ document.getElementById('snPosition'),
 			document.getElementById('levelIndex'),
 			document.getElementById('keyIndex'),
-			document.getElementById('typeIndex'),
-			document.getElementById('save') ].forEach(function(element, index,
-			array) {
+			document.getElementById('typeIndex') ].forEach(function(element,
+			index, array) {
 		element.onmouseover = showTooltip;
 		element.onmouseout = hideTooltip;
 	});

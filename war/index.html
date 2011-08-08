@@ -27,7 +27,7 @@
 				<select id="settingRecord">
 					<option value="null">Saved Records</option>
 				</select>
-				<img alt="Delete Record" src="/static/images/delete.gif" style="cursor: pointer;">
+				<img id="deleteButton" alt="Delete Record" src="/static/images/delete.gif" style="cursor: pointer;">
 			</div>
 			<span>Address Location</span>
 			<div>
@@ -54,7 +54,10 @@
 				<input id="typeIndex" type="number" size="2">
 			</div>
 			<div>
-				<span>Save</span><input type="checkbox" id="save" name="save">
+				<span>Save</span>
+				<input type="checkbox" id="save" name="save" onchange="showOrHideInputbox(this, [document.getElementById('saveName'), document.getElementById('saveButton')]);">
+				<input type="text" id="saveName" size="5" style="visibility: hidden;">
+				<input type="button" id="saveButton" value="Save" style="visibility: hidden;">
 			</div>
 		</div>
 		<div>It will support to read work sheet on Google document in
