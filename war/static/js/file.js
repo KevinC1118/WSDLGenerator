@@ -35,7 +35,7 @@ var upload = function(files) {
 
 		for ( var i = 0, input; input = inputs[i]; i++) {
 			builder += dashdash + boundary + crlf;
-			builder += 'content-disposition: form-data; name="' + input.name
+			builder += 'content-disposition: form-data; name="' + input.id
 					+ '"' + crlf + crlf;
 			builder += input.value + crlf;
 		}

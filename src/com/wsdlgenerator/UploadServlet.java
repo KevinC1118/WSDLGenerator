@@ -100,6 +100,9 @@ public class UploadServlet extends HttpServlet {
 							prop.setProperty(
 									"excel2wsdl.targetnamespace.urlprefix",
 									value);
+						} else if (fieldName.equals("snPosition")) {
+							prop.setProperty("excel2wsdl.msgName.position",
+									value);
 						}
 					}
 

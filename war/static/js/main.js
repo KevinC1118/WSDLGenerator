@@ -51,6 +51,7 @@ var showPanels = function() {
 	tagList.style.right = '300px';
 	panel.style.width = '300px';
 	panel.style.overflow = 'auto';
+	panel.style.minHeight = '435px';
 };
 
 var closePanels = function(evt) {
@@ -61,6 +62,7 @@ var closePanels = function(evt) {
 	tagList.style.right = '';
 	panel.style.width = '';
 	panel.style.overflow = '';
+	panel.style.minHeight = '';
 };
 
 var showPanel = function() {
@@ -149,8 +151,7 @@ window.onload = function() {
 		}
 	};
 
-	[ document.getElementById('snPosition'),
-			document.getElementById('levelIndex'),
+	[ document.getElementById('levelIndex'),
 			document.getElementById('keyIndex'),
 			document.getElementById('typeIndex') ].forEach(function(element,
 			index, array) {

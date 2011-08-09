@@ -49,7 +49,7 @@ var SettingStorage = {
 				SettingStorage.recordDelete(SettingStorage.$menu.value);
 				SettingStorage.menuDelete();
 			}
-			
+
 		}, false);
 	},
 
