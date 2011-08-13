@@ -51,7 +51,7 @@ var showPanels = function() {
 	tagList.style.right = '300px';
 	panel.style.width = '300px';
 	panel.style.overflow = 'auto';
-	panel.style.minHeight = '435px';
+	panel.style.minHeight = '300px';
 };
 
 var closePanels = function(evt) {
@@ -151,11 +151,11 @@ window.onload = function() {
 		}
 	};
 
-	[ document.getElementById('levelIndex'),
-			document.getElementById('keyIndex'),
-			document.getElementById('typeIndex') ].forEach(function(element,
-			index, array) {
-		element.onmouseover = showTooltip;
-		element.onmouseout = hideTooltip;
-	});
+//	[ document.getElementById('levelIndex'),
+//			document.getElementById('keyIndex'),
+//			document.getElementById('typeIndex') ].forEach(function(element,
+//			index, array) {
+//		element.onmouseover = showTooltip;
+//		element.onmouseout = hideTooltip;
+//	});
 };
