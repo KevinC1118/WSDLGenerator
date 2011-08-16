@@ -23,7 +23,9 @@
 		<li id="gdTag"><div></div></li>
 	</ul>
 	<div id="settingPanels">
+		<!-- settingTag -->
 		<jsp:include page="WEB-INF/pages/settingTag.jsp"></jsp:include>
+		<!-- gdTag -->
 		<jsp:include page="WEB-INF/pages/gdTag.jsp"></jsp:include>
 		<img alt="close" src="/static/images/close.gif"
 			onclick="closePanels()"

@@ -12,9 +12,6 @@ var SettingStorage = {
 	$addressLocation : document.getElementById('addressLocation'),
 	$targetnamespace : document.getElementById('targetnamespace'),
 	$snPosition : document.getElementById('snPosition'),
-	$levelIndex : document.getElementById('levelIndex'),
-	$keyIndex : document.getElementById('keyIndex'),
-	$typeIndex : document.getElementById('typeIndex'),
 
 	init : function() {
 
@@ -30,11 +27,8 @@ var SettingStorage = {
 
 			var v = {
 				addressLocation : SettingStorage.$addressLocation.value,
-				keyIndex : SettingStorage.$keyIndex.value,
-				levelIndex : SettingStorage.$levelIndex.value,
 				snPosition : SettingStorage.$snPosition.value,
 				targetnamespace : SettingStorage.$targetnamespace.value,
-				typeIndex : SettingStorage.$typeIndex.value
 			};
 
 			var n = SettingStorage.$inputbox.value;
@@ -80,12 +74,9 @@ var SettingStorage = {
 
 		SettingStorage.$addressLocation.value = rec.addressLocation ? rec.addressLocation
 				: '';
-		SettingStorage.$keyIndex.value = rec.keyIndex ? rec.keyIndex : '';
-		SettingStorage.$levelIndex.value = rec.levelIndex ? rec.levelIndex : '';
 		SettingStorage.$snPosition.value = rec.snPosition ? rec.snPosition : '';
 		SettingStorage.$targetnamespace.value = rec.targetnamespace ? rec.targetnamespace
 				: '';
-		SettingStorage.$typeIndex.value = rec.typeIndex ? rec.typeIndex : '';
 	}
 };
 SettingStorage.init();

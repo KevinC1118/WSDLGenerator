@@ -90,7 +90,7 @@ body {
 #settingTag>div {
 	background: url("/static/images/tags.png") no-repeat 0 0;
 	height: 64px;
-	width: 19px;
+	width: 18px;
 }
 
 #gdTag {
@@ -100,7 +100,7 @@ body {
 #gdTag>div {
 	background: url("/static/images/tags.png") no-repeat -19px 0px;
 	height: 95px;
-	width: 19px;
+	width: 17px;
 }
 
 #settingPanels {
