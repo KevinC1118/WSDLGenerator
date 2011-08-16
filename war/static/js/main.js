@@ -48,8 +48,8 @@ var showPanels = function() {
 
 	var panel = document.querySelector('#settingPanels');
 
-	tagList.style.right = '300px';
-	panel.style.width = '300px';
+	tagList.style.right = '400px';
+	panel.style.width = '400px';
 	panel.style.overflow = 'auto';
 	panel.style.minHeight = '300px';
 };

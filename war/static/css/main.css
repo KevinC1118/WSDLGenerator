@@ -103,6 +103,16 @@ body {
 	width: 17px;
 }
 
+#introdTag {
+	background-color: #058400;
+}
+
+#introdTag>div {
+	background: url("/static/images/tags.png") no-repeat -35px 0px;
+	height: 48px;
+	width: 17px;
+}
+
 #settingPanels {
 	position: absolute;
 	z-index: 75;
@@ -123,7 +133,7 @@ body {
 
 #settingPanels>DIV {
 	padding: 10px;
-	width: 280px;
+	width: 380px;
 	display: none;
 }
 

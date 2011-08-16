@@ -19,10 +19,12 @@
 	</div>
 	<input type="file" id="file" name="file" multiple="multiple">
 	<ul id="tagList">
+		<li id="introdTag"><div></div></li>
 		<li id="settingTag"><div></div></li>
 		<li id="gdTag"><div></div></li>
 	</ul>
 	<div id="settingPanels">
+		<jsp:include page="WEB-INF/pages/introdTag.jsp"></jsp:include>
 		<!-- settingTag -->
 		<jsp:include page="WEB-INF/pages/settingTag.jsp"></jsp:include>
 		<!-- gdTag -->
