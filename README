@@ -1,0 +1,29 @@
+* SchemaGenerator :
+	It's responsible to generate Schema file.
+* WSDLGenerator :
+	It is responsible to generator WSDL file.
+Both SchemaGenerator and WSDLGenerator extend AbstractGenerator.
+
+* UnknowTypeException :
+	Custom exception. When field type "word" spelled wrong or undefined type, it will throw UnknowTypeException
+	
+* DownloadServlet :
+	All generated WSDL and Schema file will wrapped into a zip file. This Servlet is responsible to download it.
+
+* UploadServlet :
+	It is responsible to handle uploaded excel files.
+	
+Usage:
+
+	Step 1:
+		Setting 『address location』, a.k.a SOAP address location, in Setting tab page(at right sign).
+		If the common usage of soap address is http://localhost:8080/WebService/service/{service name}, you should fill in "http://localhost:8080/WebService/service/"
+		Then fill in Targetnamespace. If your Targetnamespace format is http://test.com.tw/{Service name}, you should fill in "http://test.com.tw/"
+		If you do not want to fill in these field again at next time, you can check "save" option. 
+	Step 2:
+		Upload excel files. There are two manner to do it.
+		First one is click anywhere and it will open file selection dialog.
+		Second one is drag and drop.
+		Finish file selection, click uploading image, it will start to upload file.
+	Step 3:
+		Finally, you can see a dialog and there is a download link inside it. You will get a zip file that include all WSDL and Schema files.
