@@ -24,14 +24,18 @@
 		<li id="gdTag"><div></div></li>
 	</ul>
 	<div id="settingPanels">
+		<img alt="close" src="/static/images/close.gif"
+			onclick="closePanels()" style="cursor: pointer; margin: 10px 0 0 10px;">
 		<jsp:include page="WEB-INF/pages/introdTag.jsp"></jsp:include>
 		<!-- settingTag -->
 		<jsp:include page="WEB-INF/pages/settingTag.jsp"></jsp:include>
 		<!-- gdTag -->
 		<jsp:include page="WEB-INF/pages/gdTag.jsp"></jsp:include>
 		<img alt="close" src="/static/images/close.gif"
+			onclick="closePanels()" style="cursor: pointer; margin: 0 0 10px 10px;">
+		<!-- <img alt="close" src="/static/images/close.gif"
 			onclick="closePanels()"
-			style="position: absolute; bottom: 10px; left: 10px; cursor: pointer;">
+			style="position: absolute; bottom: 10px; left: 10px; cursor: pointer;"> -->
 		<script type="text/javascript" src="/static/js/storage.js"></script>
 	</div>
 </body>
