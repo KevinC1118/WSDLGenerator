@@ -31,8 +31,6 @@
 		<jsp:include page="WEB-INF/pages/settingTag.jsp"></jsp:include>
 		<!-- gdTag -->
 		<jsp:include page="WEB-INF/pages/gdTag.jsp"></jsp:include>
-		<img alt="close" src="/static/images/close.gif"
-			onclick="closePanels()" style="cursor: pointer; margin: 0 0 10px 10px;">
 		<!-- <img alt="close" src="/static/images/close.gif"
 			onclick="closePanels()"
 			style="position: absolute; bottom: 10px; left: 10px; cursor: pointer;"> -->
