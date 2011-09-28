@@ -125,8 +125,7 @@ public class WSDLGenerator extends AbstractGenerator {
 			generatedFile.setBlob(new Blob(insertSchemaImport(
 					stream.toByteArray(), definition, serviceName)));
 			generatedFile.setName(new StringBuffer(definition.getQName()
-					.getLocalPart()).append('_').append(serviceName)
-					.append(".wsdl").toString());
+					.getLocalPart()).append(".wsdl").toString());
 			wsdlFiles.add(generatedFile);
 
 			/*
