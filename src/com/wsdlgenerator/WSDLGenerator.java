@@ -369,10 +369,9 @@ public class WSDLGenerator extends AbstractGenerator {
 					.getProperty("excel2wsdl.namespace.xsd"));
 			schemaImport.setAttribute("namespace",
 					namespace.get(serviceName.toLowerCase().trim()).toString());
-			schemaImport.setAttribute("schemaLocation",
-					new StringBuffer(definition.getQName().getLocalPart())
-							.append('_').append(serviceName).append(".xsd")
-							.toString());
+			schemaImport.setAttribute("schemaLocation", new StringBuffer(
+					definition.getQName().getLocalPart()).append(".xsd")
+					.toString());
 			schema.addContent(schemaImport);
 
 			types.addContent(schema);
