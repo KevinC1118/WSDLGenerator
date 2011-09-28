@@ -67,7 +67,7 @@ public class UploadServlet extends HttpServlet {
 			FileItemIterator itemIterator = fileUpload.getItemIterator(req);
 			List<ExcelFile> excelFiles = new ArrayList<ExcelFile>();
 			List<GeneratedFile> generatedFiles = new ArrayList<GeneratedFile>();
-
+			
 			while (itemIterator.hasNext()) {
 				FileItemStream itemStream = itemIterator.next();
 				InputStream stream = itemStream.openStream();
@@ -91,7 +91,7 @@ public class UploadServlet extends HttpServlet {
 					value = outputStream.toString();
 
 					outputStream.close();
-
+					LOGGER.info(value + " " + fieldName);
 					if (!value.equals("")) {
 						if (fieldName.equals("addressLocation")) {
 							prop.setProperty("excel2wsdl.soapaddress.location",

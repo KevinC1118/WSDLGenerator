@@ -192,7 +192,9 @@ public class WSDLGenerator extends AbstractGenerator {
 		part.setName("request");
 		part.setElementName(new QName(namespace.get(serviceName.toLowerCase())
 				.toString(), new StringBuffer(definition.getQName()
-				.getLocalPart()).append(".").append(serviceName.toUpperCase())
+				.getLocalPart()).replace(
+				definition.getQName().getLocalPart().lastIndexOf("_"),
+				definition.getQName().getLocalPart().lastIndexOf("_") + 1, ".")
 				.toString()));
 		message.addPart(part);
 		// set message's name
@@ -212,9 +214,14 @@ public class WSDLGenerator extends AbstractGenerator {
 
 		part.setName("response");
 		part.setElementName(new QName(namespace.get(serviceName.toLowerCase())
-				.toString(), new StringBuffer(definition.getQName()
-				.getLocalPart()).append('.').append(serviceName.toUpperCase())
-				.append("Response").toString()));
+				.toString(),
+				new StringBuffer(definition.getQName().getLocalPart())
+						.replace(
+								definition.getQName().getLocalPart()
+										.lastIndexOf("_"),
+								definition.getQName().getLocalPart()
+										.lastIndexOf("_") + 1, ".")
+						.append("Response").toString()));
 		message.addPart(part);
 		message.setQName(new QName(namespace.get("tns").toString(),
 				new StringBuffer(serviceName.toUpperCase()).append(
@@ -326,9 +333,8 @@ public class WSDLGenerator extends AbstractGenerator {
 
 		soapAddress = new SOAPAddressImpl();
 		soapAddress.setLocationURI(new StringBuffer(getProperty().getProperty(
-				"excel2wsdl.soapaddress.location"))
-				.append(definition.getQName().getLocalPart()).append('_')
-				.append(serviceName.toUpperCase()).toString());
+				"excel2wsdl.soapaddress.location")).append(
+				definition.getQName().getLocalPart()).toString());
 
 		port.addExtensibilityElement(soapAddress);
 		port.setBinding((Binding) bindings.get(new QName(namespace.get("tns")
@@ -336,8 +342,7 @@ public class WSDLGenerator extends AbstractGenerator {
 				.append(getProperty().getProperty("excel2wsdl.binding.suffix"))
 				.toString())));
 
-		port.setName(new StringBuffer(definition.getQName().getLocalPart())
-				.append('_').append(serviceName.toUpperCase()).toString());
+		port.setName(definition.getQName().getLocalPart());
 
 		service.addPort(port);
 		service.setQName(new QName(namespace.get("tns").toString(),

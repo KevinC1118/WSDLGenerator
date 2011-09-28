@@ -2,8 +2,7 @@ var upload = function(files) {
 
 	hideTipword();
 
-	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = '---------fdsfwefFDSF', inputs = document
-			.querySelectorAll('#settingPanels>div:FIRST-CHILD input'), dashdash = '--', crlf = '\r\n', builder = '';
+	var xmlhttp = new XMLHttpRequest(), url = 'Upload', boundary = '---------fdsfwefFDSF', dashdash = '--', crlf = '\r\n', builder = '';
 
 	xmlhttp.open('POST', url, true);
 	xmlhttp.setRequestHeader('Content-type', 'multipart/form-data; boundary='
@@ -31,15 +30,23 @@ var upload = function(files) {
 		}
 	}, false);
 
-	if (inputs) {
+	// addressLocation
+	builder += dashdash + boundary + crlf;
+	builder += 'content-disposition: form-data; name="'
+			+ document.getElementById('addressLocation').id + '"' + crlf + crlf;
+	builder += document.getElementById('addressLocation').value + crlf;
 
-		for ( var i = 0, input; input = inputs[i]; i++) {
-			builder += dashdash + boundary + crlf;
-			builder += 'content-disposition: form-data; name="' + input.id
-					+ '"' + crlf + crlf;
-			builder += input.value + crlf;
-		}
-	}
+	// targetnamespace
+	builder += dashdash + boundary + crlf;
+	builder += 'content-disposition: form-data; name="'
+			+ document.getElementById('targetnamespace').id + '"' + crlf + crlf;
+	builder += document.getElementById('targetnamespace').value + crlf;
+
+	// snPosition
+	builder += dashdash + boundary + crlf;
+	builder += 'content-disposition: form-data; name="'
+			+ document.getElementById('snPosition').id + '"' + crlf + crlf;
+	builder += document.getElementById('snPosition').value + crlf;
 
 	for ( var i = 0, f; f = files[i]; i++) {
 
